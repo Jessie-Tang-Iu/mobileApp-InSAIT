@@ -4,6 +4,7 @@ import { constantStyles } from '../components/constants';
 import { TextInput } from 'react-native-gesture-handler';
 import { useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import Post from '../components/post';
 
 export default function App() {
 
@@ -25,7 +26,8 @@ export default function App() {
                     </>
                 </View>
                 <View style={styles.content}>
-                    <Text>Content will be in here</Text>
+                    {/* <Text>Content will be in here</Text> */}
+                    <Post />
                 </View>
                 <View style={styles.footer}>
                     <Navbar />
