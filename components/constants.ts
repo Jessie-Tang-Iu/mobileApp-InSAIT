@@ -1,27 +1,27 @@
 import { StyleSheet } from 'react-native';
 
 export const constantStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  button: {
-    backgroundColor: 'blue',
-    color: 'white',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 10,
-  },
-  button2: {
-    backgroundColor: '#2196F3',
-    padding: 10,
-    borderRadius: 5,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginVertical: 10,
-    elevation: 3,
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    button: {
+        backgroundColor: 'blue',
+        color: 'white',
+        padding: 10,
+        borderRadius: 5,
+        marginTop: 10,
+    },
+    button2: {
+        backgroundColor: '#2196F3',
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 10,
+        elevation: 3,
     },
     text: {
         color: '#fff',
@@ -36,6 +36,19 @@ export const constantStyles = StyleSheet.create({
     bannerImage: {
       width: '100%',
       height: '100%',
+    },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingHorizontal: 15,
+        paddingTop: 10,
+        paddingBottom: 30,
+    },
+    tabButton: {
+        fontSize: 35,
+        color: '#fff',
+        marginVertical: 10,
+        marginHorizontal: 15,
     },
 });
 
