@@ -21,14 +21,6 @@ export default function Layout() {
 
                 </Stack> 
             </View>
-            
-            {/* <View style={constantStyles.banner}>
-                <Image
-                    source={{ uri: 'https://example.com/banner.jpg' }}
-                    style={constantStyles.bannerImage}
-                    resizeMode="cover"
-                />
-            </View> */}
         </SafeAreaProvider>
     );
 }
