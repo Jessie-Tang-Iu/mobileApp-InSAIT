@@ -1,18 +1,42 @@
 [
     {
+        "id": "1",
         "eventName": "Friendly Football Game",
-        "organizationName": "Afro-Caribbean Student Club"
+        "organizationName": "Afro-Caribbean Student Club",
+        "startTime": "2025-07-20T18:00:00",
+        "endTime": "2025-07-20T19:00:00",
+        "location": "SAIT",
+        "cost": 0,
+        "details": "asndfoadfn"
     },
     {
+        "id": "2",
         "eventName": "Chess Night",
-        "organizationName": "Board Game Society"
+        "organizationName": "Board Game Society",
+        "startTime": "2025-07-22T18:00:00",
+        "endTime": "2025-07-22T19:00:00",
+        "location": "SAIT",
+        "cost": 0,
+        "details": "asndfoadfn"
     },
     {
+        "id": "3",
         "eventName": "2025 Canadian Summer Bible Conference",
-        "organizationName": "SAIT University Bible Fellowship"
+        "organizationName": "SAIT University Bible Fellowship",
+        "startTime": "2025-07-18T12:00:00",
+        "endTime": "2025-07-18T13:00:00",
+        "location": "SAIT",
+        "cost": 0,
+        "details": "asndfoadfn"
     },
     {
+        "id": "4",
         "eventName": "Lunch and Learn with Clifton",
-        "organizationName": "CVT Student Club"
+        "organizationName": "CVT Student Club",
+        "startTime": "2025-07-28T12:00:00",
+        "endTime": "2025-07-28T14:00:00",
+        "location": "SAIT",
+        "cost": 0,
+        "details": "asndfoadfn"
     }
 ]
