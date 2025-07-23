@@ -1,24 +1,29 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import { constantStyles } from './constants';
+import { PostItem } from "../lib/post_object_types";
+import { useRouter } from "expo-router";
 
+type PostProps = {
+    posts: PostItem[];
+};
 
-export default function Post() {
+export default function Post({posts}: PostProps) {
 
     const icon = require('../assets/icon.png');
+    const router = useRouter();
 
     return(
         <View style={styles.post}>
-            <View style={styles.container}>
-                <Image source={icon} style={styles.image} />
-                <Text style={styles.text}>Friendly Football Game</Text>
-                <Text style={styles.text}>Afro-Caribbean Student Club</Text>
-            </View>
-            <View style={styles.container}>
-                <Image source={icon} style={styles.image} />
-                <Text style={styles.text}>Friendly Football Game</Text>
-                <Text style={styles.text}>Afro-Caribbean Student Club</Text>
-            </View>
+            {posts.map((post, index) => (
+                <TouchableOpacity key={index} onPress={() => router.push(`/`)}>
+                    <View style={styles.container} key={index}>
+                        <Image source={icon} style={styles.image} />
+                        <Text style={styles.text}>{post.eventName}</Text>
+                        <Text style={styles.text}>{post.organizationName}</Text>
+                    </View>
+                </TouchableOpacity>
+            ))}
         </View>
         
     )
@@ -41,6 +46,7 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: 130,
+        borderRadius: 10,
     },
     text: {
         padding: 10,

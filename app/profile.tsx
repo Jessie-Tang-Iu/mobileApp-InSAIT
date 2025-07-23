@@ -1,36 +1,30 @@
-import { StyleSheet, Text, View } from 'react-native';
-import Navbar from '../components/navbar';
-import { constantStyles } from '../components/constants';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import { useState } from 'react';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import Post from '../components/post';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+import Navbar from "../components/navbar";
+import Post from "../components/post";
 import posts from "../lib/posts.json"
 
-export default function App() {
 
-    const [searchText, setSearchText] = useState("");
 
-    return (
+export default function Profile() {
+
+    return(
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>Hi, UserName</Text>
-                    <Text style={styles.text}>Find the upcoming events</Text>
-                    <>
-                        <TextInput
-                            placeholder="search"
-                            value={searchText}
-                            onChangeText={setSearchText}
-                            style={styles.search}
-                        />
-                    </>
+                    <Text style={styles.headerText}>UserName</Text>
+                    <Text style={styles.text}>user@gmail.com</Text>
                 </View>
                 <View style={styles.content}>
+                    <Text style={styles.headerContent}>My Registered Event</Text>
                     <ScrollView>
-                        {/* <Text>Content will be in here</Text> */}
                         <Post posts={posts} />
                     </ScrollView>
+                </View>
+                <View style={styles.profileFunctions}>
+                    <TouchableOpacity><Text style={styles.profileText}>General</Text></TouchableOpacity>
+                    <TouchableOpacity><Text style={styles.profileText}>Edit Profile</Text></TouchableOpacity>
+                    <TouchableOpacity><Text style={styles.profileText}>Log out</Text></TouchableOpacity>
                 </View>
                 <View style={styles.footer}>
                     <Navbar />
@@ -44,8 +38,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        // justifyContent: 'center',
     },
     header: {
         padding: 20,
@@ -76,7 +68,23 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 15,
         lineHeight: 20,
-        height: 460,
+        height: 367,
+    },
+    headerContent: {
+        paddingVertical: 15,
+        color: '#000',
+        fontSize: 20,
+        fontWeight: 'bold',
+        paddingHorizontal: 20,
+    },
+    profileFunctions: {
+        borderTopWidth: 1,
+        padding: 10,
+    },
+    profileText: {
+        fontSize: 20,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
     },
     footer: {
         backgroundColor: '#263F75',
