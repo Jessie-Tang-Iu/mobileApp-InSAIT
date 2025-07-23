@@ -19,14 +19,14 @@ export default function AddEvent() {
     const [showStartPicker, setShowStartPicker] = useState(false);
     const [showEndPicker, setShowEndPicker] = useState(false);
 
-    const onStartChange = (event, selectedDate) => {
+    const onStartChange = (event: any,selectedDate: Date) => {
         setShowStartPicker(Platform.OS === 'ios');
         if (selectedDate) {
         setStartTime(selectedDate);
         }
     };
 
-    const onEndChange = (event, selectedDate) => {
+    const onEndChange = (event: any,selectedDate: Date) => {
         setShowEndPicker(Platform.OS === 'ios');
         if (selectedDate) {
         setEndTime(selectedDate);
