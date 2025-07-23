@@ -1,5 +1,4 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Feather } from '@expo/vector-icons';
 import { constantStyles } from './constants';
 import { PostItem } from "../lib/post_object_types";
 import { useRouter } from "expo-router";
@@ -16,7 +15,7 @@ export default function Post({posts}: PostProps) {
     return(
         <View style={styles.post}>
             {posts.map((post, index) => (
-                <TouchableOpacity key={index} onPress={() => router.push(`/`)}>
+                <TouchableOpacity key={index} onPress={() => router.push(`/event/${post.id}`)}>
                     <View style={styles.container} key={index}>
                         <Image source={icon} style={styles.image} />
                         <Text style={styles.text}>{post.eventName}</Text>

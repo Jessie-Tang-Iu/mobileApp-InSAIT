@@ -1,4 +1,10 @@
 export interface PostItem {
-  eventName: string;
-  organizationName: string;
+    id: string;
+    eventName: string;
+    organizationName: string;
+    startTime: string;
+    endTime: string;
+    location: string;
+    cost: number;
+    details: string;
 };

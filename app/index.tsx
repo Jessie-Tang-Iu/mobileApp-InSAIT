@@ -5,7 +5,7 @@ import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Post from '../components/post';
-import posts from "../lib/posts.json"
+import posts from "../lib/posts.json";
 
 export default function App() {
 
