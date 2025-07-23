@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.52.0",
     "expo": "~53.0.20",
     "expo-calendar": "~14.1.4",
     "expo-constants": "~17.1.7",
