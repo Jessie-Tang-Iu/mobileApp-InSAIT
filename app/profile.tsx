@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     headerText: {
-        paddingTop: 20,
+        // paddingTop: 20,
         color: '#fff',
         fontSize: 35,
         fontWeight: 'bold',
@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     content: {
+        flex: 1,
         color: '#fff',
         fontSize: 15,
         lineHeight: 20,

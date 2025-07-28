@@ -13,7 +13,7 @@ export default function App() {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <View style={styles.container}>
+            <View style={[styles.container]}>
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Hi, UserName</Text>
                     <Text style={styles.text}>Find the upcoming events</Text>
@@ -26,7 +26,7 @@ export default function App() {
                         />
                     </>
                 </View>
-                <View style={styles.content}>
+                <View style={[styles.content]}>
                     <ScrollView>
                         {/* <Text>Content will be in here</Text> */}
                         <Post posts={posts} />
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     headerText: {
-        paddingTop: 20,
+        // paddingTop: 20,
         color: '#fff',
         fontSize: 35,
         fontWeight: 'bold',
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     content: {
+        flex: 1,
         color: '#fff',
         fontSize: 15,
         lineHeight: 20,
