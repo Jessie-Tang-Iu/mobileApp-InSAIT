@@ -1,7 +1,7 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { constantStyles } from './constants';
 import { PostItem } from "../lib/object_types";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 type PostProps = {
     posts: PostItem[];

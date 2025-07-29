@@ -4,12 +4,14 @@ import posts from '../../lib/posts.json';
 import Navbar from '../../components/navbar';
 import { useEffect, useState } from 'react';
 import users from "../../lib/user.json";
+import { useUserContext } from '../../context/userContext';
 
 export default function EventDetails() {
 
   const params = useLocalSearchParams();
   const postId = Array.isArray(params.postId) ? params.postId[0] : params.postId;
-  const username = params.username as string;
+
+  const {username, email} = useUserContext();
 
   const [user, setUser] = useState<any>(null);
   const [isRegistered, setIsRegistered] = useState(false);
@@ -43,7 +45,7 @@ export default function EventDetails() {
   });
 
   useEffect(() => {
-    const foundUser = users.find((cred) => cred.username === username);
+    const foundUser = users.find((cred) => cred.email === email);
     if (foundUser && typeof postId === 'string') {
       setUser(foundUser);
       setIsRegistered(foundUser.registeredEvent.includes(postId));

@@ -4,24 +4,25 @@ import { Feather } from '@expo/vector-icons';
 import { constantStyles } from '../components/constants';
 import { useEffect, useState } from "react";
 import users from "../lib/user.json";
+import { useUserContext } from "../context/userContext";
 
 interface NavbarProps {
     username: string;
 }
-
-
 
 export default function Navbar({ username }: NavbarProps) {
 
     const router = useRouter();
     const [userType, setUserType] = useState("");
 
+    const {email} = useUserContext();
+
     useEffect(() => {
-        const user = users.find((cred) => cred.username === username);
+        const user = users.find((cred) => cred.email === email);
         if(user) {
             setUserType(user.userType)
         }
-    }, [username]);
+    }, []);
 
     if (userType === "admin") {
         return (

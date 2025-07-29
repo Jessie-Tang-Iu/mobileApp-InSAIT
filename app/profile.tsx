@@ -1,11 +1,11 @@
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
+import { useRouter } from "expo-router";
 import Navbar from "../components/navbar";
 import Post from "../components/post";
-import posts from "../lib/posts.json"
-import { router } from "expo-router";
+import posts from "../lib/posts.json";
 import { useUserContext } from "../context/userContext";
-import { useEffect, useState } from "react";
 import users from "../lib/user.json";
 import { PostItem } from "../lib/object_types";
 
@@ -24,7 +24,7 @@ export default function Profile() {
 
     useEffect(() => {
         const user = users.find((cred) => cred.email === email);
-        if(user) {
+        if (user) {
             const matchedEvents = posts.filter((event) =>
                 user.registeredEvent.includes(event.id)
             );
