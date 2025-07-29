@@ -93,11 +93,11 @@ export default function App() {
                 </View>
                 <View style={[styles.content]}>
                     <ScrollView>
-                        <Post posts={posts} username={username} />
+                        <Post posts={posts} />
                     </ScrollView>
                 </View>
                 <View style={styles.footer}>
-                    <Navbar username={username} />
+                    <Navbar />
                 </View>
             </View>
         </GestureHandlerRootView>

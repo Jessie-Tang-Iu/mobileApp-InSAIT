@@ -4,12 +4,16 @@ import posts from '../../lib/posts.json';
 import Navbar from '../../components/navbar';
 import { useEffect, useState } from 'react';
 import users from "../../lib/user.json";
+import { useUserContext } from '../../context/userContext';
+import { Config } from 'react-native-gesture-handler/lib/typescript/web/interfaces';
+// import * as fs from 'fs';
 
 export default function EventDetails() {
 
   const params = useLocalSearchParams();
   const postId = Array.isArray(params.postId) ? params.postId[0] : params.postId;
-  const username = params.username as string;
+
+  const {email} = useUserContext();
 
   const [user, setUser] = useState<any>(null);
   const [isRegistered, setIsRegistered] = useState(false);
@@ -43,16 +47,16 @@ export default function EventDetails() {
   });
 
   useEffect(() => {
-    const foundUser = users.find((cred) => cred.username === username);
+    const foundUser = users.find((cred) => cred.email.toLowerCase() === email.toLowerCase());
     if (foundUser && typeof postId === 'string') {
       setUser(foundUser);
       setIsRegistered(foundUser.registeredEvent.includes(postId));
     }
-  }, [username, postId]);
+  }, [email, postId]);
 
   const handleRegister = () => {
     if (!user || isRegistered) return;
-
+    // updateUserFile();
     // Simulate registering by updating local state
     const updatedUser = {
       ...user,
@@ -92,7 +96,7 @@ export default function EventDetails() {
         )}
       </View>
       <View style={styles.footer}>
-        <Navbar username={username} />
+        <Navbar />
       </View>
     </View>
   );
@@ -106,7 +110,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingTop: 50,
+    // paddingTop: 50,
     paddingHorizontal: 25,
     paddingBottom: 30,
   },

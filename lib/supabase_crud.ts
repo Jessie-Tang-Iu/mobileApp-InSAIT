@@ -1,11 +1,11 @@
 import { supabase } from "./supabase";
 import { UserProfile } from "./object_types";
 
-const table_name = 'user_profiles';
+// const table_name = 'user_profiles';
 
 export async function getAllUsers() {
     const { data, error } = await supabase
-        .from(table_name)
+        .from('user_profiles')
         .select('*')
         .order('id', {ascending: true});
     
@@ -18,7 +18,7 @@ export async function getAllUsers() {
 
 export async function getUserById(id: number) {
     const { data, error } = await supabase
-        .from(table_name)
+        .from('user_profiles')
         .select('*')
         .eq('id', id)
         .single();
@@ -32,7 +32,7 @@ export async function getUserById(id: number) {
 
 export async function addUser(item: UserProfile) {
     const { data, error } = await supabase
-        .from(table_name)
+        .from('user_profiles')
         .insert([item]);
     
     if (error) {
@@ -44,7 +44,7 @@ export async function addUser(item: UserProfile) {
 
 export async function updateUser(id: number, user: UserProfile) {
     const { data, error } = await supabase
-        .from(table_name)
+        .from('user_profiles')
         .update(user)
         .eq("id", id);
     
@@ -57,7 +57,7 @@ export async function updateUser(id: number, user: UserProfile) {
 
 export async function deleteUser(id: number) {
     const { data, error } = await supabase
-        .from(table_name)
+        .from('user_profiles')
         .delete()
         .eq("id", id);
 
