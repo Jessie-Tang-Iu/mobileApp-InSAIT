@@ -107,32 +107,6 @@ export async function addPost(post: PostItem) {
     return data;
 }
 
-export async function updatePost(id: number, post: PostItem) {
-    const { data, error } = await supabase
-        .from('post_events')
-        .update(post)
-        .eq("id", id);
-    
-    if (error) {
-        console.error(`Error updating post with ID ${id}: `, error);
-        throw error;
-    }
-    return data;
-}
-
-export async function deletePost(id: number) {
-    const { data, error } = await supabase
-        .from('post_events')
-        .delete()
-        .eq("id", id);
-
-    if (error) {
-        console.error(`Error deleting post with ID ${id}: `, error);
-        throw error;
-    }
-    return data;
-}
-
 export async function getAllRegisteredEvents() {
     const { data, error } = await supabase
         .from('registered_events')
