@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
   eventDetails: {
     flex: 1,
     padding: 15,
+    marginTop: 70,
   },
   eventCard: {
     backgroundColor: '#263F75',
