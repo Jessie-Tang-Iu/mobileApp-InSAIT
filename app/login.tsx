@@ -1,15 +1,58 @@
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import users from "../lib/user.json";
 
+interface LoginProps {
+    setIsLoggedIn: (isLoggedIn: boolean) => void;
+    setUserName: (username: string) => void;
+}
 
-
-export default function Login() {
+const Login: React.FC<LoginProps> = ({ setIsLoggedIn, setUserName }) =>{
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
     const router = useRouter();
 
+    const checkCredentials = () => {
+        if (users) {
+            const user = users.find(
+                (cred) => cred.username === username.trim() && cred.password === password.trim()
+            );
+
+            if (user) {
+                setErrorMessage("");
+                console.log("Login successful: ", user.username);
+                setUserName(user.username);
+                setIsLoggedIn(true);
+            } else {
+                setErrorMessage("Invalid username and password");
+                console.log(errorMessage);
+            }
+        }
+    }
+
+    const handleLogin = () => {
+        if(username.length < 5) {
+            setErrorMessage("Username must be at least 5 characters long.");
+            console.log(errorMessage);
+            return;
+        }
+        // const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+        // if(!passwordRegex.test(password)) {
+        //     setErrorMessage("Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character.");
+        //     console.log(errorMessage);
+        //     setPassword("");
+        //     return;
+        // }
+        else {
+            checkCredentials();
+        }
+
+        setUsername("");
+        setPassword("");
+    };
 
     return(
         <ImageBackground 
@@ -32,7 +75,9 @@ export default function Login() {
                     onChangeText={setPassword}
                     style={styles.search}
                 />
-                <TouchableOpacity onPress={() => router.push(`/`)} style={styles.button}><Text style={styles.buttonText}>Sign in</Text></TouchableOpacity>
+                <TouchableOpacity onPress={handleLogin} style={styles.button}>
+                    <Text style={styles.buttonText}>Sign in</Text>
+                </TouchableOpacity>
             <View 
             style={{flexDirection: 'row'}}>
                 <Text style={styles.profileText}>Don't have an account?</Text>
@@ -119,3 +164,5 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
 });
+
+export default Login;

@@ -1,0 +1,26 @@
+[
+    {
+        "username": "JessieTang",
+        "password": "123456",
+        "userType": "admin",
+        "firstName": "Jessie",
+        "lastName": "Tang",
+        "email": "jessiestitch666@gmail.com"
+    },
+    {
+        "username": "lamDao",
+        "password": "123456",
+        "userType": "admin",
+        "firstName": "Lam",
+        "lastName": "Dao",
+        "email": "Lam.Dao@edu.sait.ca"
+    },
+    {
+        "username": "user1",
+        "password": "123456",
+        "userType": "user",
+        "firstName": "User",
+        "lastName": "One",
+        "email": "user1@gmail.com"
+    }
+]

@@ -6,37 +6,44 @@ import { useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Post from '../components/post';
 import posts from "../lib/posts.json";
+import Login from './login';
 
 export default function App() {
 
     const [searchText, setSearchText] = useState("");
-
-    return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.headerText}>Hi, UserName</Text>
-                    <Text style={styles.text}>Find the upcoming events</Text>
-                    <>
-                        <TextInput
-                            placeholder="search"
-                            value={searchText}
-                            onChangeText={setSearchText}
-                            style={styles.search}
-                        />
-                    </>
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState("");
+    
+    if (!isLoggedIn) {
+        return <Login setIsLoggedIn={setIsLoggedIn} setUserName={setUsername} />;
+    } else {
+        return (
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <View style={styles.container}>
+                    <View style={styles.header}>
+                        <Text style={styles.headerText}>Hi, {username}</Text>
+                        <Text style={styles.text}>Find the upcoming events</Text>
+                        <>
+                            <TextInput
+                                placeholder="search"
+                                value={searchText}
+                                onChangeText={setSearchText}
+                                style={styles.search}
+                            />
+                        </>
+                    </View>
+                    <View style={styles.content}>
+                        <ScrollView>
+                            <Post posts={posts} />
+                        </ScrollView>
+                    </View>
+                    <View style={styles.footer}>
+                        <Navbar username={username} />
+                    </View>
                 </View>
-                <View style={styles.content}>
-                    <ScrollView>
-                        <Post posts={posts} />
-                    </ScrollView>
-                </View>
-                <View style={styles.footer}>
-                    <Navbar />
-                </View>
-            </View>
-        </GestureHandlerRootView>
-    );
+            </GestureHandlerRootView>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
