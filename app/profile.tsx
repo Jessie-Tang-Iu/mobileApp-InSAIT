@@ -3,60 +3,60 @@ import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler
 import Navbar from "../components/navbar";
 import Post from "../components/post";
 import posts from "../lib/posts.json"
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { router } from "expo-router";
+import { useUserContext } from "../context/userContext";
 import { useEffect, useState } from "react";
 import users from "../lib/user.json";
-import { PostItem } from "../lib/post_object_types";
-
+import { PostItem } from "../lib/object_types";
 
 export default function Profile() {
 
-    const router = useRouter();
-    const params = useLocalSearchParams();
-    const username = params.username as string;
-
-    const [userName, setUsername] = useState(username);
-    const [email, setEmail] = useState("");
+    const { username, email, setEmail, setUserName } = useUserContext();
     const [registeredEvent, setRegisteredEvent] = useState<PostItem[]>([]);
+  
+    const router = useRouter();
     
     const handleLogout = () => {
-        setUsername("");
-        router.push(`/`);
+        setEmail("");
+        setUserName("Guest");
+        router.push('../sign_in');
     };
 
     useEffect(() => {
-        const user = users.find((cred) => cred.username === userName);
+        const user = users.find((cred) => cred.email === email);
         if(user) {
-            setEmail(user.email);
-
             const matchedEvents = posts.filter((event) =>
                 user.registeredEvent.includes(event.id)
             );
-
             setRegisteredEvent(matchedEvents);
         }
-    }, [userName]);
+    }, []);
 
     return(
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>{userName}</Text>
+                    <Text style={styles.headerText}>{username}</Text>
                     <Text style={styles.text}>{email}</Text>
                 </View>
                 <View style={styles.content}>
                     <Text style={styles.headerContent}>My Registered Event</Text>
                     <ScrollView>
-                        <Post posts={registeredEvent} username={userName} />
+                        <Post posts={registeredEvent} username={username} />
                     </ScrollView>
                 </View>
                 <View style={styles.profileFunctions}>
                     <TouchableOpacity><Text style={styles.profileText}>General</Text></TouchableOpacity>
                     <TouchableOpacity><Text style={styles.profileText}>Edit Profile</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={handleLogout}><Text style={styles.profileText}>Log out</Text></TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text 
+                            style={styles.profileText}
+                            onPress={handleLogout}
+                        >Log out</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.footer}>
-                    <Navbar username={userName} />
+                    <Navbar username={username} />
                 </View>
             </View>
         </GestureHandlerRootView>
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     headerText: {
-        paddingTop: 20,
+        // paddingTop: 20,
         color: '#fff',
         fontSize: 35,
         fontWeight: 'bold',
@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     content: {
+        flex: 1,
         color: '#fff',
         fontSize: 15,
         lineHeight: 20,

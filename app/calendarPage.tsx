@@ -110,12 +110,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    paddingTop: 20,
+    // paddingTop: 20,
     color: '#fff',
     fontSize: 35,
     fontWeight: 'bold',
   },
   calendar: {
+    flex: 1,
     height: 350,
   },
   eventDetails: {
