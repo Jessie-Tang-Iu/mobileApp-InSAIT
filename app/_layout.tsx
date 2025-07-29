@@ -18,7 +18,6 @@ export default function Layout() {
                             headerTitleStyle: { fontWeight: 'bold' },
                         }}
                     />
-
                 </Stack> 
             </View>
         </SafeAreaProvider>

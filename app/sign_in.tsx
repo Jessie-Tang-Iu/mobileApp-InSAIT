@@ -6,7 +6,7 @@ import SupabaseAuth from "../components/supabase_signin";
 export default function SignIn() {
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Welcome to the App</Text>
+            <Text style={styles.title}>Welcome to the InSAIT App</Text>
             <Text style={styles.subtitle}>Please sign in to continue</Text>
             <SupabaseAuth />
         </View>

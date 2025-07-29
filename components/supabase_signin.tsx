@@ -2,8 +2,12 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
 import { signIn, signUp } from "../lib/supabase_auth";
 import { useRouter } from "expo-router";
+import { addUser } from "../lib/supabase_crud";
+import { UserProfile } from "../lib/object_types";
 
 const SupabaseAuth = () => {
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isSignIn, setIsSignIn] = useState(true);
@@ -13,23 +17,38 @@ const SupabaseAuth = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const router = useRouter();
+    const newProfile = {
+        first_name: '',
+        last_name: '',
+        email: '',
+        admin_role: false, // or a default value as required
+    };
 
-    // useEffect(() => {
-    //     const checkSession = async () => {
-    //         try {
-    //             const session = await getSession();
-    //             if (session) {
-    //                 setSession(session);
-    //                 router.push('/'); // Redirect to home if session exists
-    //             }
-    //         } catch (error) {
-    //             console.error("Error checking session:", error);
-    //         }
-    //     };
-    //     if (!session) {
-    //         checkSession();
-    //     };
-    // }, [session]);
+    const registerUser = async () => {
+        if (!firstName || !lastName || !email || !password) {
+            setError("All fields are required");
+            return;
+        }
+        setLoading(true);
+        setError(null);
+        let newProfile = {
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            admin_role: false, // or set as needed
+        };
+        try {
+            await signUp(email, password);
+            
+            setIsAuthenticated(true);
+            await addUser(newProfile);
+        
+        } catch (err: any) {
+            setError(err instanceof Error ? err.message : "Registration failed");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const handleAuth = async () => {
         if (!email || !password) {
@@ -44,9 +63,10 @@ const SupabaseAuth = () => {
                 setIsAuthenticated(true);
                 router.push('/'); // Redirect to home on successful sign in
             } else {
-                await signUp(email, password);
-                setIsAuthenticated(true);
-                router.push('/'); // Redirect to home on successful sign up
+                await registerUser();
+                // If registration is successful, sign in the user
+                setIsSignIn(true);
+                
             }
         } catch (err: any) {
             setError(err instanceof Error ? err.message : "Authentication failed");
@@ -59,6 +79,22 @@ const SupabaseAuth = () => {
         <View style={styles.container}>
             <Text style={styles.title}>{isSignIn? 'Sign In' : 'Sign Up'}</Text>
             {error && <Text style={styles.errorText}>{error}</Text>}
+            {!isSignIn && (
+                <>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="First Name"
+                        value={firstName}
+                        onChangeText={setFirstName}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Last Name"
+                        value={lastName}
+                        onChangeText={setLastName}
+                    />
+                </>
+            )}
             <TextInput
                 style={styles.input}
                 placeholder="Email"

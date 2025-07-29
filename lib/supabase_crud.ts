@@ -1,7 +1,7 @@
 import { supabase } from "./supabase";
 import { UserProfile } from "./object_types";
 
-const table_name = 'users';
+const table_name = 'user_profiles';
 
 export async function getAllUsers() {
     const { data, error } = await supabase
