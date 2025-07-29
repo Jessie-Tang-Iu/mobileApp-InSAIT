@@ -23,7 +23,7 @@ export default function Profile() {
     };
 
     useEffect(() => {
-        const user = users.find((cred) => cred.username === userName.trim());
+        const user = users.find((cred) => cred.username === userName);
         if(user) {
             setEmail(user.email);
         }
