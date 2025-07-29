@@ -5,13 +5,9 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 
 type PostProps = {
     posts: PostItem[];
-    username: string;
 };
 
-export default function Post({posts, username}: PostProps) {
-
-    const params = useLocalSearchParams();
-    // const username = params.username as string;
+export default function Post({posts}: PostProps) {
 
     const icon = require('../assets/icon.png');
     const router = useRouter();
@@ -19,7 +15,7 @@ export default function Post({posts, username}: PostProps) {
     return(
         <View style={styles.post}>
             {posts.map((post, index) => (
-                <TouchableOpacity key={index} onPress={() => router.push({pathname: `/event/${post.id}`, params: { username }})}>
+                <TouchableOpacity key={index} onPress={() => router.push('/event/${post.id}')}>
                     <View style={styles.container} key={index}>
                         <Image source={icon} style={styles.image} />
                         <Text style={styles.text}>{post.eventName}</Text>

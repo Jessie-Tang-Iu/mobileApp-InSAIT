@@ -42,7 +42,7 @@ export default function Profile() {
                 <View style={styles.content}>
                     <Text style={styles.headerContent}>My Registered Event</Text>
                     <ScrollView>
-                        <Post posts={registeredEvent} username={username} />
+                        <Post posts={registeredEvent} />
                     </ScrollView>
                 </View>
                 <View style={styles.profileFunctions}>
@@ -56,7 +56,7 @@ export default function Profile() {
                     </TouchableOpacity>
                 </View>
                 <View style={styles.footer}>
-                    <Navbar username={username} />
+                    <Navbar />
                 </View>
             </View>
         </GestureHandlerRootView>

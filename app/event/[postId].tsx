@@ -45,7 +45,7 @@ export default function EventDetails() {
   });
 
   useEffect(() => {
-    const foundUser = users.find((cred) => cred.email === email);
+    const foundUser = users.find((cred) => cred.email.toLowerCase() === email.toLowerCase());
     if (foundUser && typeof postId === 'string') {
       setUser(foundUser);
       setIsRegistered(foundUser.registeredEvent.includes(postId));
@@ -94,7 +94,7 @@ export default function EventDetails() {
         )}
       </View>
       <View style={styles.footer}>
-        <Navbar username={username} />
+        <Navbar />
       </View>
     </View>
   );

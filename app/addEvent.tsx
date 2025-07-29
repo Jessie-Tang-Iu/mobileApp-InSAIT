@@ -8,9 +8,6 @@ import { useLocalSearchParams } from "expo-router";
 
 
 export default function AddEvent() {
-
-    const params = useLocalSearchParams();
-    const username = params.username as string;
     
     const [eventName, setEventName] = useState("");
     const [organizerName, setOrganizerName] = useState("");
@@ -106,7 +103,7 @@ export default function AddEvent() {
                 </ScrollView>
             </View>
             <View style={styles.footer}>
-                <Navbar username={username} />
+                <Navbar />
             </View>
         </View>
     );
