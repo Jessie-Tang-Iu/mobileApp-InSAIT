@@ -4,6 +4,8 @@ import Navbar from "../components/navbar";
 import Post from "../components/post";
 import posts from "../lib/posts.json"
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
+import users from "../lib/user.json";
 
 
 export default function Profile() {
@@ -12,12 +14,27 @@ export default function Profile() {
     const params = useLocalSearchParams();
     const username = params.username as string;
 
+    const [userName, setUsername] = useState(username);
+    const [email, setEmail] = useState("");
+
+    const handleLogout = () => {
+        setUsername("");
+        router.push(`/`);
+    };
+
+    useEffect(() => {
+        const user = users.find((cred) => cred.username === userName.trim());
+        if(user) {
+            setEmail(user.email);
+        }
+    }, [userName]);
+
     return(
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>{username}</Text>
-                    <Text style={styles.text}>user@gmail.com</Text>
+                    <Text style={styles.headerText}>{userName}</Text>
+                    <Text style={styles.text}>{email}</Text>
                 </View>
                 <View style={styles.content}>
                     <Text style={styles.headerContent}>My Registered Event</Text>
@@ -28,10 +45,10 @@ export default function Profile() {
                 <View style={styles.profileFunctions}>
                     <TouchableOpacity><Text style={styles.profileText}>General</Text></TouchableOpacity>
                     <TouchableOpacity><Text style={styles.profileText}>Edit Profile</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={() => router.push(`../login`)}><Text style={styles.profileText}>Log out</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={handleLogout}><Text style={styles.profileText}>Log out</Text></TouchableOpacity>
                 </View>
                 <View style={styles.footer}>
-                    <Navbar username={username} />
+                    <Navbar username={userName} />
                 </View>
             </View>
         </GestureHandlerRootView>
