@@ -27,7 +27,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [email, setEmail] = useState<string>("");
 
     return (
-        <UserContext.Provider value={{ username, email, setEmail, setUserName }}>
+        <UserContext.Provider value={{ username, email, setEmail, setUserName }}> 
             {children}
         </UserContext.Provider>
     );

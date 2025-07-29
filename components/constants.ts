@@ -42,7 +42,7 @@ export const constantStyles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingHorizontal: 15,
         paddingTop: 10,
-        paddingBottom: 30,
+        paddingBottom: 20,
     },
     tabButton: {
         fontSize: 35,
