@@ -6,7 +6,8 @@ import { Alert } from "react-native";
 
 interface UserProfile {
     id: string;
-    username: string | null;
+    first_name: string | null;
+    last_name: string | null;
     email: string | null;
 }
 
@@ -80,8 +81,8 @@ export const UserContextProvider = ({ children } : UserContextProviderProps) => 
     const fetchProfile = async (userId: string) => {
         try {
             const { data, error } = await supabase
-                .from("profiles")
-                .select("id, username, email")
+                .from("user_profiles")
+                .select("id, first_name, last_name, email")
                 .eq("id", userId)
                 .single();
             
@@ -138,7 +139,7 @@ export const UserContextProvider = ({ children } : UserContextProviderProps) => 
         setIsLoading(true);
         try {
             const {error} = await supabase
-                .from("profiles")
+                .from("user_profiles")
                 .update(updates)
                 .eq("id", user.id);
             
