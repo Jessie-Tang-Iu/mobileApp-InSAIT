@@ -3,19 +3,20 @@ import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler
 import Navbar from "../components/navbar";
 import Post from "../components/post";
 import posts from "../lib/posts.json"
-import { useRouter } from "expo-router";
-
+import { useLocalSearchParams, useRouter } from "expo-router";
 
 
 export default function Profile() {
 
     const router = useRouter();
+    const params = useLocalSearchParams();
+    const username = params.username as string;
 
     return(
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>UserName</Text>
+                    <Text style={styles.headerText}>{username}</Text>
                     <Text style={styles.text}>user@gmail.com</Text>
                 </View>
                 <View style={styles.content}>
@@ -30,7 +31,7 @@ export default function Profile() {
                     <TouchableOpacity onPress={() => router.push(`../login`)}><Text style={styles.profileText}>Log out</Text></TouchableOpacity>
                 </View>
                 <View style={styles.footer}>
-                    <Navbar />
+                    <Navbar username={username} />
                 </View>
             </View>
         </GestureHandlerRootView>
