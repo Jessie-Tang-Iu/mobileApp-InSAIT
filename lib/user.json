@@ -1,0 +1,29 @@
+[
+    {
+        "username": "JessieTang",
+        "password": "123456",
+        "userType": "admin",
+        "firstName": "Jessie",
+        "lastName": "Tang",
+        "email": "jessiestitch666@gmail.com",
+        "registeredEvent": ["1","3"]
+    },
+    {
+        "username": "lamDao",
+        "password": "123456",
+        "userType": "admin",
+        "firstName": "Lam",
+        "lastName": "Dao",
+        "email": "Lam.Dao@edu.sait.ca",
+        "registeredEvent": ["1","2"]
+    },
+    {
+        "username": "user1",
+        "password": "123456",
+        "userType": "user",
+        "firstName": "User",
+        "lastName": "One",
+        "email": "user1@gmail.com",
+        "registeredEvent": ["1","2","4"]
+    }
+]

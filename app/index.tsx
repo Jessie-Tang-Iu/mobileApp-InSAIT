@@ -6,11 +6,11 @@ import { useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Post from '../components/post';
 import posts from "../lib/posts.json";
-// import { useUserContext } from "../context/authContext";
 import { useRouter } from 'expo-router';
 import { getSession } from '../lib/supabase_auth';
 import { getAllUsers } from '../lib/supabase_crud';
 import { useUserContext } from '../context/userContext';
+// import { useUserContext } from "../context/authContext";
 
 interface UserProfile {
     id: number;
@@ -23,6 +23,7 @@ interface UserProfile {
 export default function App() {
 
     const [searchText, setSearchText] = useState("");
+
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
@@ -92,12 +93,11 @@ export default function App() {
                 </View>
                 <View style={[styles.content]}>
                     <ScrollView>
-                        {/* <Text>Content will be in here</Text> */}
-                        <Post posts={posts} />
+                        <Post posts={posts} username={username} />
                     </ScrollView>
                 </View>
                 <View style={styles.footer}>
-                    <Navbar />
+                    <Navbar username={username} />
                 </View>
             </View>
         </GestureHandlerRootView>

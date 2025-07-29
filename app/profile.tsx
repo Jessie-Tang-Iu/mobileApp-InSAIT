@@ -5,10 +5,32 @@ import Post from "../components/post";
 import posts from "../lib/posts.json"
 import { router } from "expo-router";
 import { useUserContext } from "../context/userContext";
+import { useEffect, useState } from "react";
+import users from "../lib/user.json";
+import { PostItem } from "../lib/object_types";
 
 export default function Profile() {
 
-    const { username, email } = useUserContext();
+    const { username, email, setEmail, setUserName } = useUserContext();
+    const [registeredEvent, setRegisteredEvent] = useState<PostItem[]>([]);
+  
+    const router = useRouter();
+    
+    const handleLogout = () => {
+        setEmail("");
+        setUserName("Guest");
+        router.push('../sign_in');
+    };
+
+    useEffect(() => {
+        const user = users.find((cred) => cred.email === email);
+        if(user) {
+            const matchedEvents = posts.filter((event) =>
+                user.registeredEvent.includes(event.id)
+            );
+            setRegisteredEvent(matchedEvents);
+        }
+    }, []);
 
     return(
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -20,7 +42,7 @@ export default function Profile() {
                 <View style={styles.content}>
                     <Text style={styles.headerContent}>My Registered Event</Text>
                     <ScrollView>
-                        <Post posts={posts} />
+                        <Post posts={registeredEvent} username={username} />
                     </ScrollView>
                 </View>
                 <View style={styles.profileFunctions}>
@@ -29,12 +51,12 @@ export default function Profile() {
                     <TouchableOpacity>
                         <Text 
                             style={styles.profileText}
-                            onPress={() => router.push('../sign_in')}
+                            onPress={handleLogout}
                         >Log out</Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.footer}>
-                    <Navbar />
+                    <Navbar username={username} />
                 </View>
             </View>
         </GestureHandlerRootView>

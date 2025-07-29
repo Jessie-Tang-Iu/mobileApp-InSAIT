@@ -1,24 +1,99 @@
-import { View, StyleSheet, Text } from 'react-native';
-import { Calendar } from 'react-native-calendars'; 
+import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import { Calendar } from 'react-native-calendars';
 import Navbar from '../components/navbar';
+import { useLocalSearchParams } from 'expo-router';
+import { useEffect, useState } from 'react';
+
+import users from '../lib/user.json';
+import events from '../lib/posts.json';
 
 export default function CalendarPage() {
+  const params = useLocalSearchParams();
+  const username = params.username as string;
+
+  const [markedDates, setMarkedDates] = useState<{ [key: string]: any }>({});
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [userEvents, setUserEvents] = useState<typeof events>([]);
+  const [selectedEvents, setSelectedEvents] = useState<typeof events>([]);
+
+  useEffect(() => {
+    const user = users.find((u) => u.username === username);
+    if (user) {
+      const userEventIds = user.registeredEvent;
+
+      const filteredEvents = events.filter((event) =>
+        userEventIds.includes(event.id)
+      );
+      setUserEvents(filteredEvents);
+
+      const newMarkedDates: { [key: string]: any } = {};
+      filteredEvents.forEach((event) => {
+        const date = event.startTime.split('T')[0];
+        newMarkedDates[date] = {
+          marked: true,
+          dotColor: 'blue',
+        };
+      });
+
+      setMarkedDates(newMarkedDates);
+    }
+  }, [username]);
+
+  const handleDayPress = (day: any) => {
+    const selected = day.dateString;
+    setSelectedDate(selected);
+
+    const eventsOnDay = userEvents.filter(
+      (event) => event.startTime.split('T')[0] === selected
+    );
+    setSelectedEvents(eventsOnDay);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.headerText}>My Calendar</Text>
       </View>
+
       <View style={styles.calendar}>
         <Calendar
           current={'2025-07-01'}
-          onDayPress={(day) => console.log('selected day', day)}
+          onDayPress={handleDayPress}
           markedDates={{
-            '2025-07-22': { selected: true, marked: true, selectedColor: 'blue' },
+            ...markedDates,
+            ...(selectedDate
+              ? {
+                  [selectedDate]: {
+                    ...(markedDates[selectedDate] || {}),
+                    selected: true,
+                    selectedColor: 'lightblue',
+                  },
+                }
+              : {}),
           }}
         />
       </View>
+
+      <ScrollView style={styles.eventDetails}>
+        {selectedEvents.length > 0 ? (
+          selectedEvents.map((event) => (
+            <View key={event.id} style={styles.eventCard}>
+              <Text style={styles.eventTitle}>{event.eventName}</Text>
+              <Text style={styles.eventText}>Location: {event.location}</Text>
+              <Text style={styles.eventText}>
+                Time: {event.startTime} - {event.endTime}
+              </Text>
+            </View>
+          ))
+        ) : (
+          selectedDate && (
+            <Text style={styles.noEventText}>No events on this day</Text>
+          )
+        )}
+      </ScrollView>
+
       <View style={styles.footer}>
-        <Navbar />
+        <Navbar username={username} />
       </View>
     </View>
   );
@@ -42,7 +117,32 @@ const styles = StyleSheet.create({
   },
   calendar: {
     flex: 1,
-    height: 549,
+    height: 350,
+  },
+  eventDetails: {
+    flex: 1,
+    padding: 15,
+  },
+  eventCard: {
+    backgroundColor: '#263F75',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  eventTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff'
+  },
+  eventText: {
+    fontSize: 13,
+    color: '#fff',
+    paddingVertical: 3,
+  },
+  noEventText: {
+    textAlign: 'center',
+    marginTop: 20,
+    color: '#888',
   },
   footer: {
     backgroundColor: '#263F75',

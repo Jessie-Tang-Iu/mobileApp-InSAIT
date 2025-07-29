@@ -3,10 +3,14 @@ import Navbar from "../components/navbar";
 import React, { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform } from 'react-native';
+import { useLocalSearchParams } from "expo-router";
 
 
 
 export default function AddEvent() {
+
+    const params = useLocalSearchParams();
+    const username = params.username as string;
     
     const [eventName, setEventName] = useState("");
     const [organizerName, setOrganizerName] = useState("");
@@ -102,7 +106,7 @@ export default function AddEvent() {
                 </ScrollView>
             </View>
             <View style={styles.footer}>
-                <Navbar />
+                <Navbar username={username} />
             </View>
         </View>
     );
