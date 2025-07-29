@@ -11,7 +11,7 @@ export default function Navbar() {
     const router = useRouter();
     const [userType, setUserType] = useState("");
 
-    const { email } = useUserContext();
+    const { email, admin } = useUserContext();
 
     useEffect(() => {
         const user = users.find((cred) => cred.email.toLowerCase() === email.toLowerCase());
@@ -20,7 +20,7 @@ export default function Navbar() {
         }
     }, [email]);
 
-    if (userType === "admin") {
+    if (admin) {
         return (
             <View style={constantStyles.footer}>
                 <TouchableOpacity onPress={() => router.push('/')}><Feather name='home' style={constantStyles.tabButton}></Feather></TouchableOpacity>

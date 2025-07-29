@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import Navbar from "../components/navbar";
@@ -7,12 +7,17 @@ import Post from "../components/post";
 import posts from "../lib/posts.json";
 import { useUserContext } from "../context/userContext";
 import users from "../lib/user.json";
-import { PostItem } from "../lib/object_types";
+import { PostItem, RegisteredEvent } from "../lib/object_types";
+import { getRegisteredEventByEmail, getAllPosts } from '../lib/supabase_crud';
 
 export default function Profile() {
 
     const { username, email, setEmail, setUserName } = useUserContext();
-    const [registeredEvent, setRegisteredEvent] = useState<PostItem[]>([]);
+
+    const [posts, setPosts] = useState<PostItem[]>([]);
+    const [register, setRegister] = useState<PostItem[]>([]);
+    const [registeredEvents, setRegisteredEvents] = useState<RegisteredEvent[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
   
     const router = useRouter();
     
@@ -22,15 +27,45 @@ export default function Profile() {
         router.push('../sign_in');
     };
 
-    useEffect(() => {
-        const user = users.find((cred) => cred.email === email);
-        if (user) {
-            const matchedEvents = posts.filter((event) =>
-                user.registeredEvent.includes(event.id)
-            );
-            setRegisteredEvent(matchedEvents);
+    const fetchAllRegisteredEvents = async () => {
+        try {
+            setLoading(true);
+            const data = await getRegisteredEventByEmail(email);
+            setRegisteredEvents(data);
+        } catch (error) {
+            console.error('Error fetching all registered events: ', error);
+            Alert.alert('Error ', 'Failed to load all registered events data');
+        } finally {
+            setLoading(false);
         }
-    }, []);
+    }; 
+        
+    const fetchAllPosts = async () => {
+        try {
+            setLoading(true);
+            const data = await getAllPosts();
+            setPosts(data);
+        } catch (error) {
+            console.error('Error fetching all posts: ', error);
+            Alert.alert('Error ', 'Failed to load all posts data');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchAllPosts();
+        fetchAllRegisteredEvents();
+    }, [])
+
+    useEffect(() => {
+        let thisRegister: PostItem[] = [];
+        registeredEvents.forEach((event: RegisteredEvent) => {
+            const thisPost = posts.find((cred: PostItem) => cred.id === event.post_id);
+            if (thisPost) thisRegister.push(thisPost);
+        });
+        setRegister(thisRegister);
+    }, [posts, registeredEvents]);
 
     return(
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -42,7 +77,7 @@ export default function Profile() {
                 <View style={styles.content}>
                     <Text style={styles.headerContent}>My Registered Event</Text>
                     <ScrollView>
-                        <Post posts={registeredEvent} />
+                        <Post posts={register} />
                     </ScrollView>
                 </View>
                 <View style={styles.profileFunctions}>
