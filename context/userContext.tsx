@@ -2,6 +2,8 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface UserContextType {
     username: string;
+    email: string;
+    setEmail: (email: string) => void;
     setUserName: (username: string) => void;
 }
 
@@ -22,9 +24,10 @@ interface UserProviderProps {
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
     const [username, setUserName] = useState<string>("Guest");
+    const [email, setEmail] = useState<string>("");
 
     return (
-        <UserContext.Provider value={{ username, setUserName }}>
+        <UserContext.Provider value={{ username, email, setEmail, setUserName }}>
             {children}
         </UserContext.Provider>
     );

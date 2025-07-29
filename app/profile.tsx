@@ -4,15 +4,18 @@ import Navbar from "../components/navbar";
 import Post from "../components/post";
 import posts from "../lib/posts.json"
 import { router } from "expo-router";
+import { useUserContext } from "../context/userContext";
 
 export default function Profile() {
+
+    const { username, email } = useUserContext();
 
     return(
         <GestureHandlerRootView style={{ flex: 1 }}>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>UserName</Text>
-                    <Text style={styles.text}>user@gmail.com</Text>
+                    <Text style={styles.headerText}>{username}</Text>
+                    <Text style={styles.text}>{email}</Text>
                 </View>
                 <View style={styles.content}>
                     <Text style={styles.headerContent}>My Registered Event</Text>
@@ -26,7 +29,7 @@ export default function Profile() {
                     <TouchableOpacity>
                         <Text 
                             style={styles.profileText}
-                            onPress={() => router.push('/sign_in')}
+                            onPress={() => router.push('../sign_in')}
                         >Log out</Text>
                     </TouchableOpacity>
                 </View>

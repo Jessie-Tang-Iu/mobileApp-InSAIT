@@ -3,13 +3,7 @@ import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
 import { useRouter } from "expo-router";
 import { Alert } from "react-native";
-
-interface UserProfile {
-    id: string;
-    first_name: string | null;
-    last_name: string | null;
-    email: string | null;
-}
+import { UserProfile } from "../lib/object_types";
 
 interface UserContextType {
     user: User | null;
@@ -82,7 +76,7 @@ export const UserContextProvider = ({ children } : UserContextProviderProps) => 
         try {
             const { data, error } = await supabase
                 .from("user_profiles")
-                .select("id, first_name, last_name, email")
+                .select("id, first_name, last_name, email, admin_role")
                 .eq("id", userId)
                 .single();
             

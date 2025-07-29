@@ -3,7 +3,6 @@ import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, Touchable
 import { signIn, signUp } from "../lib/supabase_auth";
 import { useRouter } from "expo-router";
 import { addUser } from "../lib/supabase_crud";
-import { UserProfile } from "../lib/object_types";
 
 const SupabaseAuth = () => {
     const [firstName, setFirstName] = useState("");

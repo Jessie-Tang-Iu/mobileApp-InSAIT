@@ -23,14 +23,13 @@ interface UserProfile {
 export default function App() {
 
     const [searchText, setSearchText] = useState("");
-    const [email, setEmail] = useState<string>("");
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [users, setUsers] = useState<UserProfile[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     
     // const { user, session, profile, isLoading, signOut, signIn, updateProfile } = useUserContext();
     const router = useRouter();
-    const {username, setUserName} = useUserContext();
+    const {username, email, setEmail, setUserName} = useUserContext();
 
     const getCurrentSession = async () => {
         try {
@@ -70,11 +69,10 @@ export default function App() {
             setProfile(thisProfile);
         };
         getProfile();
-        setUserName(profile?.first_name || "Guest");
     }, [users])
 
     useEffect(() => {
-        
+        setUserName(profile?.first_name || "Guest");
     }, [profile])
 
     return (
