@@ -8,8 +8,9 @@ import Post from '../components/post';
 import posts from "../lib/posts.json";
 import { useRouter } from 'expo-router';
 import { getSession } from '../lib/supabase_auth';
-import { getAllUsers } from '../lib/supabase_crud';
+import { getAllUsers, getAllPosts } from '../lib/supabase_crud';
 import { useUserContext } from '../context/userContext';
+import { PostItem } from '../lib/object_types';
 // import { useUserContext } from "../context/authContext";
 
 interface UserProfile {
@@ -26,11 +27,12 @@ export default function App() {
 
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [users, setUsers] = useState<UserProfile[]>([]);
+    const [posts, setPosts] = useState<PostItem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     
     // const { user, session, profile, isLoading, signOut, signIn, updateProfile } = useUserContext();
     const router = useRouter();
-    const {username, email, setEmail, setUserName} = useUserContext();
+    const {username, email, setEmail, setUserName, setAdmin} = useUserContext();
 
     const getCurrentSession = async () => {
         try {
@@ -59,8 +61,22 @@ export default function App() {
         }
     };
 
+    const fetchAllPosts = async () => {
+        try {
+            setLoading(true);
+            const data = await getAllPosts();
+            setPosts(data);
+        } catch (error) {
+            console.error('Error fetching all posts: ', error);
+            Alert.alert('Error ', 'Failed to load all posts data');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchAllUsers();
+        fetchAllPosts();
         getCurrentSession();
     }, []);
 
@@ -74,6 +90,7 @@ export default function App() {
 
     useEffect(() => {
         setUserName(profile?.first_name || "Guest");
+        if (profile?.admin_role) setAdmin(true);
     }, [profile])
 
     return (

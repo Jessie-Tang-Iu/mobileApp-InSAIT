@@ -146,15 +146,14 @@ export async function getAllRegisteredEvents() {
     return data;
 }
 
-export async function getRegisteredEventById(id: number) {
+export async function getRegisteredEventByEmail(email: string) {
     const { data, error } = await supabase
         .from('registered_events')
         .select('*')
-        .eq('id', id)
-        .single();
+        .eq('profile_email', email);
     
     if (error) {
-        console.error(`Error fetching registered event with ID ${id}: `, error);
+        console.error(`Error fetching registered event with email ${email}: `, error);
         throw error;
     }
     return data;

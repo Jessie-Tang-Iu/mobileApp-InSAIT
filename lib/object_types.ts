@@ -19,6 +19,6 @@ export interface UserProfile {
 
 export interface RegisteredEvent {
     id?: number;
-    profile_id: string;
+    profile_email: string;
     post_id: string;
 }
