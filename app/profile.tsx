@@ -3,10 +3,13 @@ import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler
 import Navbar from "../components/navbar";
 import Post from "../components/post";
 import posts from "../lib/posts.json"
+import { useRouter } from "expo-router";
 
 
 
 export default function Profile() {
+
+    const router = useRouter();
 
     return(
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -24,7 +27,7 @@ export default function Profile() {
                 <View style={styles.profileFunctions}>
                     <TouchableOpacity><Text style={styles.profileText}>General</Text></TouchableOpacity>
                     <TouchableOpacity><Text style={styles.profileText}>Edit Profile</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.profileText}>Log out</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => router.push(`../login`)}><Text style={styles.profileText}>Log out</Text></TouchableOpacity>
                 </View>
                 <View style={styles.footer}>
                     <Navbar />
