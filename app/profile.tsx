@@ -18,6 +18,7 @@ export default function Profile() {
     const [userName, setUsername] = useState(username);
     const [email, setEmail] = useState("");
     const [registeredEvent, setRegisteredEvent] = useState<PostItem[]>([]);
+    
     const handleLogout = () => {
         setUsername("");
         router.push(`/`);
@@ -46,7 +47,7 @@ export default function Profile() {
                 <View style={styles.content}>
                     <Text style={styles.headerContent}>My Registered Event</Text>
                     <ScrollView>
-                        <Post posts={registeredEvent} />
+                        <Post posts={registeredEvent} username={userName} />
                     </ScrollView>
                 </View>
                 <View style={styles.profileFunctions}>
