@@ -6,6 +6,7 @@ import posts from "../lib/posts.json"
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import users from "../lib/user.json";
+import { PostItem } from "../lib/post_object_types";
 
 
 export default function Profile() {
@@ -16,7 +17,7 @@ export default function Profile() {
 
     const [userName, setUsername] = useState(username);
     const [email, setEmail] = useState("");
-
+    const [registeredEvent, setRegisteredEvent] = useState<PostItem[]>([]);
     const handleLogout = () => {
         setUsername("");
         router.push(`/`);
@@ -26,6 +27,12 @@ export default function Profile() {
         const user = users.find((cred) => cred.username === userName);
         if(user) {
             setEmail(user.email);
+
+            const matchedEvents = posts.filter((event) =>
+                user.registeredEvent.includes(event.id)
+            );
+
+            setRegisteredEvent(matchedEvents);
         }
     }, [userName]);
 
@@ -39,7 +46,7 @@ export default function Profile() {
                 <View style={styles.content}>
                     <Text style={styles.headerContent}>My Registered Event</Text>
                     <ScrollView>
-                        <Post posts={posts} />
+                        <Post posts={registeredEvent} />
                     </ScrollView>
                 </View>
                 <View style={styles.profileFunctions}>
