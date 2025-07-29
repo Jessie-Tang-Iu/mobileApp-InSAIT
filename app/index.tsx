@@ -41,7 +41,7 @@ export default function App() {
                 </View>
                 <View style={styles.content}>
                     <ScrollView>
-                        <Post posts={posts} />
+                        <Post posts={posts} username={username} />
                     </ScrollView>
                 </View>
                 <View style={styles.footer}>

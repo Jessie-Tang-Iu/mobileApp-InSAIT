@@ -1,11 +1,18 @@
 import { useLocalSearchParams } from 'expo-router';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import posts from '../../lib/posts.json';
 import Navbar from '../../components/navbar';
+import { useEffect, useState } from 'react';
+import users from "../../lib/user.json";
 
 export default function EventDetails() {
 
-  const { postId } = useLocalSearchParams();
+  const params = useLocalSearchParams();
+  const postId = Array.isArray(params.postId) ? params.postId[0] : params.postId;
+  const username = params.username as string;
+
+  const [user, setUser] = useState<any>(null);
+  const [isRegistered, setIsRegistered] = useState(false);
 
   const post = posts.find(p => p.id === postId);
   const icon = require('../../assets/icon.png');
@@ -35,6 +42,28 @@ export default function EventDetails() {
     minute: '2-digit',
   });
 
+  useEffect(() => {
+    const foundUser = users.find((cred) => cred.username === username);
+    if (foundUser && typeof postId === 'string') {
+      setUser(foundUser);
+      setIsRegistered(foundUser.registeredEvent.includes(postId));
+    }
+  }, [username, postId]);
+
+  const handleRegister = () => {
+    if (!user || isRegistered) return;
+
+    // Simulate registering by updating local state
+    const updatedUser = {
+      ...user,
+      registeredEvent: [...user.registeredEvent, postId],
+    };
+
+    setUser(updatedUser);
+    setIsRegistered(true);
+    Alert.alert('Success', 'You have successfully registered for this event!');
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -52,10 +81,18 @@ export default function EventDetails() {
       </ScrollView>
       <View style={styles.registerBox}>
         <Text style={styles.headerText}>Register Me</Text>
-        <TouchableOpacity style={styles.registerButton}><Text style={styles.text}>Register</Text></TouchableOpacity>
+        {isRegistered ? (
+          <Text style={{ color: 'green', fontSize: 16, paddingVertical: 10 }}>
+            ✅ You are already registered.
+          </Text>
+        ) : (
+          <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
+            <Text style={styles.text}>Register</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.footer}>
-        <Navbar />
+        <Navbar username={username} />
       </View>
     </View>
   );
