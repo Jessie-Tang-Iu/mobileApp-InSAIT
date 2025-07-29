@@ -6,10 +6,11 @@ import { useEffect, useState } from 'react';
 
 import users from '../lib/user.json';
 import events from '../lib/posts.json';
+import { useUserContext } from '../context/userContext';
 
 export default function CalendarPage() {
-  const params = useLocalSearchParams();
-  const username = params.username as string;
+
+  const {email} = useUserContext();
 
   const [markedDates, setMarkedDates] = useState<{ [key: string]: any }>({});
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
@@ -17,7 +18,7 @@ export default function CalendarPage() {
   const [selectedEvents, setSelectedEvents] = useState<typeof events>([]);
 
   useEffect(() => {
-    const user = users.find((u) => u.username === username);
+    const user = users.find((cred) => cred.email.toLowerCase() === email.toLowerCase());
     if (user) {
       const userEventIds = user.registeredEvent;
 
@@ -37,7 +38,7 @@ export default function CalendarPage() {
 
       setMarkedDates(newMarkedDates);
     }
-  }, [username]);
+  }, []);
 
   const handleDayPress = (day: any) => {
     const selected = day.dateString;
@@ -93,7 +94,7 @@ export default function CalendarPage() {
       </ScrollView>
 
       <View style={styles.footer}>
-        <Navbar username={username} />
+        <Navbar />
       </View>
     </View>
   );
@@ -110,12 +111,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerText: {
-    paddingTop: 20,
+    // paddingTop: 20,
     color: '#fff',
     fontSize: 35,
     fontWeight: 'bold',
   },
   calendar: {
+    flex: 1,
     height: 350,
   },
   eventDetails: {
