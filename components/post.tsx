@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { constantStyles } from './constants';
-import { PostItem } from "../lib/post_object_types";
+import { PostItem } from "../lib/object_types";
 import { useRouter } from "expo-router";
 
 type PostProps = {

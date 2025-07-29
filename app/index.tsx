@@ -1,15 +1,48 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Alert } from 'react-native';
 import Navbar from '../components/navbar';
 import { constantStyles } from '../components/constants';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Post from '../components/post';
 import posts from "../lib/posts.json";
+import { useUserContext } from "../context/authContext";
+import { useRouter } from 'expo-router';
+import { getSession } from '../lib/supabase_auth';
+
+interface UserProfile {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    admin_role: boolean;
+}
 
 export default function App() {
 
     const [searchText, setSearchText] = useState("");
+    const [user, setUser] = useState<UserProfile | null>(null);
+    // const { user, session, profile, isLoading, signOut, signIn, updateProfile } = useUserContext();
+    const router = useRouter();
+
+    const getCurrentSession = async () => {
+        try {
+            const session = await getSession();
+            // console.log("Current session: ", session);
+            // let user.email = session?.user.email || null;
+            if (!session) { 
+                Alert.alert("Session expired", "Please sign in again.")
+                router.push('/sign_in');
+            }
+        } catch (error) {
+            console.error("Error fetching session:", error);
+            Alert.alert("Error", "Failed to fetch session. Please sign in again.")
+        }
+    };
+
+    useEffect(() => {
+        getCurrentSession();
+    }, []);
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
