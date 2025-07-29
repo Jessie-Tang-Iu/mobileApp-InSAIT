@@ -28,7 +28,6 @@ export default function App() {
                 </View>
                 <View style={styles.content}>
                     <ScrollView>
-                        {/* <Text>Content will be in here</Text> */}
                         <Post posts={posts} />
                     </ScrollView>
                 </View>
