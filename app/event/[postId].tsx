@@ -1,12 +1,10 @@
 import { useLocalSearchParams } from 'expo-router';
 import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-// import posts from '../../lib/posts.json';
 import Navbar from '../../components/navbar';
 import { useEffect, useState } from 'react';
-import users from "../../lib/user.json";
 import { useUserContext } from '../../context/userContext';
-import { PostItem, RegisteredEvent } from '../../lib/object_types';
-import { getAllPosts } from '../../lib/supabase_crud';
+import { PostItem } from '../../lib/object_types';
+import { getAllPosts, registerEvent } from '../../lib/supabase_crud';
 
 
 export default function EventDetails() {
@@ -14,12 +12,11 @@ export default function EventDetails() {
   const params = useLocalSearchParams();
   const postId = Array.isArray(params.postId) ? params.postId[0] : params.postId;
 
-  const {email, register} = useUserContext();
+  const {email, register, setRegister} = useUserContext();
 
   const [post, setPost] = useState<PostItem | null>(null);
   const [posts, setPosts] = useState<PostItem[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [user, setUser] = useState<any>(null);
   const [isRegistered, setIsRegistered] = useState(false);
 
   const fetchAllPosts = async () => {
@@ -81,18 +78,22 @@ export default function EventDetails() {
     minute: '2-digit',
   });
 
-  const handleRegister = () => {
-    if (!user || isRegistered) return;
-    // updateUserFile();
-    // Simulate registering by updating local state
-    const updatedUser = {
-      ...user,
-      registeredEvent: [...user.registeredEvent, postId],
+  const handleRegister = async () => {
+    setLoading(true);
+    let newRegister = {
+      profile_email: email,
+      post_id: postId,
     };
-
-    setUser(updatedUser);
-    setIsRegistered(true);
-    Alert.alert('Success', 'You have successfully registered for this event!');
+    try {
+      await registerEvent(newRegister);
+      setIsRegistered(true);
+      register.push(post);
+      Alert.alert('Success', 'You have successfully registered for this event!');
+    } catch (err: any) {
+      Alert.alert("Error", err instanceof Error ? err.message : "Registration failed");
+    } finally {
+      setLoading(false);
+    };
   };
 
   return (

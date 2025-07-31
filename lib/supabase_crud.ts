@@ -133,7 +133,7 @@ export async function getRegisteredEventByEmail(email: string) {
     return data;
 }
 
-export async function registerEvent(post: PostItem) {
+export async function registerEvent(post: RegisteredEvent) {
     const { data, error } = await supabase
         .from('registered_events')
         .insert(post);
