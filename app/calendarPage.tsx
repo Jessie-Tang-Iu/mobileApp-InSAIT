@@ -105,13 +105,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
+    paddingTop: 70,
     padding: 20,
     backgroundColor: '#263F75',
     width: '100%',
     alignItems: 'center',
   },
   headerText: {
-    // paddingTop: 20,
     color: '#fff',
     fontSize: 35,
     fontWeight: 'bold',
@@ -119,11 +119,12 @@ const styles = StyleSheet.create({
   calendar: {
     flex: 1,
     height: 350,
+    marginBottom: 10,
   },
   eventDetails: {
     flex: 1,
     padding: 15,
-    marginTop: 70,
+    // marginTop: 10,
   },
   eventCard: {
     backgroundColor: '#263F75',

@@ -1,9 +1,6 @@
 import { Stack } from 'expo-router';
-
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { constantStyles } from '../components/constants';
-import { View, Image } from 'react-native';
-import { UserContextProvider } from '../context/authContext';
+import { View } from 'react-native';
 import { UserProvider } from '../context/userContext';
 
 export default function Layout() {
@@ -19,6 +16,32 @@ export default function Layout() {
                                 headerStyle: { backgroundColor: '#f4511e' },
                                 headerTintColor: '#fff',
                                 headerTitleStyle: { fontWeight: 'bold' },
+                                headerBackVisible: false,
+                                headerShown: false,
+                            }}
+                        />
+                        <Stack.Screen
+                            name="event/[postId]"
+                            options={{
+                                title: 'Event Detail',
+                            }}
+                        />
+                        <Stack.Screen 
+                            name="calendarPage"
+                            options={{
+                                headerShown: false,
+                            }}
+                        />
+                        <Stack.Screen 
+                            name="addEvent"
+                            options={{
+                                headerShown: false,
+                            }}
+                        />
+                        <Stack.Screen 
+                            name="profile"
+                            options={{
+                                headerShown: false,
                             }}
                         />
                         <Stack.Screen

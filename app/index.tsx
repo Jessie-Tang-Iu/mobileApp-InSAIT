@@ -5,32 +5,20 @@ import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { useEffect, useState } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import Post from '../components/post';
-import posts from "../lib/posts.json";
 import { useRouter } from 'expo-router';
 import { getSession } from '../lib/supabase_auth';
-import { getAllUsers } from '../lib/supabase_crud';
+import { getAllPosts } from '../lib/supabase_crud';
 import { useUserContext } from '../context/userContext';
-// import { useUserContext } from "../context/authContext";
-
-interface UserProfile {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    admin_role: boolean;
-}
+import { PostItem } from '../lib/object_types';
 
 export default function App() {
 
     const [searchText, setSearchText] = useState("");
-
-    const [profile, setProfile] = useState<UserProfile | null>(null);
-    const [users, setUsers] = useState<UserProfile[]>([]);
+    const [posts, setPosts] = useState<PostItem[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     
-    // const { user, session, profile, isLoading, signOut, signIn, updateProfile } = useUserContext();
     const router = useRouter();
-    const {username, email, setEmail, setUserName} = useUserContext();
+    const {username, setEmail} = useUserContext();
 
     const getCurrentSession = async () => {
         try {
@@ -46,38 +34,26 @@ export default function App() {
         }
     };
 
-    const fetchAllUsers = async () => {
+    const fetchAllPosts = async () => {
         try {
             setLoading(true);
-            const data = await getAllUsers();
-            setUsers(data);
+            const data = await getAllPosts();
+            setPosts(data);
         } catch (error) {
-            console.error('Error fetching all users: ', error);
-            Alert.alert('Error ', 'Failed to load all users data');
+            console.error('Error fetching all posts: ', error);
+            Alert.alert('Error ', 'Failed to load all posts data');
         } finally {
             setLoading(false);
         }
     };
 
     useEffect(() => {
-        fetchAllUsers();
+        fetchAllPosts();
         getCurrentSession();
     }, []);
 
-    useEffect(() => {
-        const getProfile = () => {
-            const thisProfile = users.find((user) => user.email === email) || null;
-            setProfile(thisProfile);
-        };
-        getProfile();
-    }, [users])
-
-    useEffect(() => {
-        setUserName(profile?.first_name || "Guest");
-    }, [profile])
-
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView style={{ flex: 1, paddingTop: 50, backgroundColor: '#263F75' }}>
             <View style={[styles.container]}>
                 <View style={styles.header}>
                     <Text style={styles.headerText}>Hi, {username}</Text>
@@ -117,7 +93,6 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     headerText: {
-        // paddingTop: 20,
         color: '#fff',
         fontSize: 35,
         fontWeight: 'bold',

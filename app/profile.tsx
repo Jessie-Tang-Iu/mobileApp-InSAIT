@@ -1,18 +1,14 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import Navbar from "../components/navbar";
 import Post from "../components/post";
-import posts from "../lib/posts.json";
 import { useUserContext } from "../context/userContext";
-import users from "../lib/user.json";
-import { PostItem } from "../lib/object_types";
 
 export default function Profile() {
 
-    const { username, email, setEmail, setUserName } = useUserContext();
-    const [registeredEvent, setRegisteredEvent] = useState<PostItem[]>([]);
+    const { username, email, register, setEmail, setUserName, setRegister } = useUserContext();
   
     const router = useRouter();
     
@@ -22,18 +18,8 @@ export default function Profile() {
         router.push('../sign_in');
     };
 
-    useEffect(() => {
-        const user = users.find((cred) => cred.email === email);
-        if (user) {
-            const matchedEvents = posts.filter((event) =>
-                user.registeredEvent.includes(event.id)
-            );
-            setRegisteredEvent(matchedEvents);
-        }
-    }, []);
-
     return(
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView style={{ flex: 1, paddingTop: 50, backgroundColor: '#263F75' }}>
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Text style={styles.headerText}>{username}</Text>
@@ -42,7 +28,7 @@ export default function Profile() {
                 <View style={styles.content}>
                     <Text style={styles.headerContent}>My Registered Event</Text>
                     <ScrollView>
-                        <Post posts={registeredEvent} />
+                        <Post posts={register} />
                     </ScrollView>
                 </View>
                 <View style={styles.profileFunctions}>

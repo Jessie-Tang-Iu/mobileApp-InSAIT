@@ -18,8 +18,8 @@ export default function Post({posts}: PostProps) {
                 <TouchableOpacity key={index} onPress={() => router.push(`/event/${post.id}`)}>
                     <View style={styles.container} key={index}>
                         <Image source={icon} style={styles.image} />
-                        <Text style={styles.text}>{post.eventName}</Text>
-                        <Text style={styles.text}>{post.organizationName}</Text>
+                        <Text style={styles.text}>{post.event_name}</Text>
+                        <Text style={styles.text}>{post.organization_name}</Text>
                     </View>
                 </TouchableOpacity>
             ))}

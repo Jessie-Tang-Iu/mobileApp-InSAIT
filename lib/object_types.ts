@@ -1,12 +1,13 @@
 export interface PostItem {
-    id: string;
-    eventName: string;
-    organizationName: string;
-    startTime: string;
-    endTime: string;
+    id?: string;
+    event_name: string;
+    organization_name: string;
+    start_time: Date;
+    end_time: Date;
     location: string;
-    cost: number;
+    cost: string;
     details: string;
+    post_url: string;
 };
 
 export interface UserProfile {
@@ -15,4 +16,10 @@ export interface UserProfile {
     last_name: string;
     email: string;
     admin_role: boolean;
+}
+
+export interface RegisteredEvent {
+    id?: number;
+    profile_email: string;
+    post_id: string;
 }

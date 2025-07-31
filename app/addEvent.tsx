@@ -1,11 +1,10 @@
-import { Button, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Navbar from "../components/navbar";
 import React, { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform } from 'react-native';
 import { useLocalSearchParams } from "expo-router";
-
-
+import { addPost } from "../lib/supabase_crud";
 
 export default function AddEvent() {
     
@@ -16,6 +15,8 @@ export default function AddEvent() {
     const [location, setLocation] = useState("");
     const [cost, setCost] = useState("");
     const [details, setDetails] = useState("");
+
+    const [loading, setLoading] = useState(false);
 
     const [showStartPicker, setShowStartPicker] = useState(false);
     const [showEndPicker, setShowEndPicker] = useState(false);
@@ -34,6 +35,27 @@ export default function AddEvent() {
         }
     };
 
+    const handleAddEvent = async () => {
+        setLoading(true);
+        let newEvent = {
+            event_name: eventName,
+            organization_name: organizerName,
+            start_time: startTime,
+            end_time: endTime,
+            location: location,
+            cost: cost,
+            details: details,
+            post_url: "",
+        };
+        try {
+            await addPost(newEvent);
+            Alert.alert('Success', 'You have successfully added a new event!');
+        } catch (err: any) {
+            Alert.alert("Error", err instanceof Error ? err.message : "Adding failed");
+        } finally {
+            setLoading(false);
+        };
+    };
 
     return(
         <View style={styles.container}>
@@ -100,6 +122,11 @@ export default function AddEvent() {
                         style={[styles.input, styles.textArea]}
                         multiline
                     />
+                    <TouchableOpacity style={styles.addButton} 
+                        onPress={handleAddEvent}
+                    >
+                        <Text style={styles.text}>Add New Event</Text>
+                  </TouchableOpacity>
                 </ScrollView>
             </View>
             <View style={styles.footer}>
@@ -116,12 +143,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     header: {
+        paddingTop: 70,
         padding: 20,
         backgroundColor: '#263F75',
         width: '100%',
+        alignItems: 'center',
     },
     headerText: {
-        // paddingTop: 20,
         color: '#fff',
         fontSize: 35,
         fontWeight: 'bold',
@@ -151,6 +179,7 @@ const styles = StyleSheet.create({
     },
     textArea: {
         height: 100,
+        paddingTop: 10,
         textAlignVertical: 'top',
     },
     footer: {
@@ -158,5 +187,19 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 15,
         paddingBottom: 10,
+    },
+    addButton: {
+        backgroundColor: '#f4511e',
+        marginHorizontal: 20,
+        marginTop: 20,
+        padding: 5,
+        marginBottom: 100,
+        alignItems: 'center',
+    },
+    text: {
+        color: '#fff',
+        fontSize: 20,
+        marginBottom: 5,
+        fontWeight: 'bold',
     },
 })

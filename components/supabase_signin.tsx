@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, TouchableOpacity } from "react-native";
+import { View, Text, TextInput, Button, StyleSheet, ActivityIndicator, TouchableOpacity, Alert } from "react-native";
 import { signIn, signUp } from "../lib/supabase_auth";
 import { useRouter } from "expo-router";
-import { addUser } from "../lib/supabase_crud";
+import { addUser, getAllPosts, getAllUsers, getRegisteredEventByEmail } from "../lib/supabase_crud";
+import { PostItem, RegisteredEvent, UserProfile } from "../lib/object_types";
+import { useUserContext } from "../context/userContext";
 
 const SupabaseAuth = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isSignIn, setIsSignIn] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    // const [session, setSession] = useState<any>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    const [profile, setProfile] = useState<UserProfile | null>(null);
+    const [users, setUsers] = useState<UserProfile[]>([]);
+    const [posts, setPosts] = useState<PostItem[]>([]);
+    const [registeredEvents, setRegisteredEvents] = useState<RegisteredEvent[]>([]);
+
+    const { email, setUserName, setEmail, setAdmin, setRegister } = useUserContext();
 
     const router = useRouter();
     const newProfile = {
@@ -38,10 +45,7 @@ const SupabaseAuth = () => {
         };
         try {
             await signUp(email, password);
-            
-            setIsAuthenticated(true);
             await addUser(newProfile);
-        
         } catch (err: any) {
             setError(err instanceof Error ? err.message : "Registration failed");
         } finally {
@@ -65,7 +69,6 @@ const SupabaseAuth = () => {
                 await registerUser();
                 // If registration is successful, sign in the user
                 setIsSignIn(true);
-                
             }
         } catch (err: any) {
             setError(err instanceof Error ? err.message : "Authentication failed");
@@ -73,6 +76,73 @@ const SupabaseAuth = () => {
             setLoading(false);
         }
     };
+
+    const fetchAllUsers = async () => {
+        try {
+            setLoading(true);
+            const data = await getAllUsers();
+            setUsers(data);
+        } catch (error) {
+            console.error('Error fetching all users: ', error);
+            Alert.alert('Error ', 'Failed to load all users data');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchAllPosts = async () => {
+        try {
+            setLoading(true);
+            const data = await getAllPosts();
+            setPosts(data);
+        } catch (error) {
+            console.error('Error fetching all posts: ', error);
+            Alert.alert('Error ', 'Failed to load all posts data');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchAllRegisteredEvents = async () => {
+        try {
+            setLoading(true);
+            const data = await getRegisteredEventByEmail(email);
+            setRegisteredEvents(data);
+        } catch (error) {
+            console.error('Error fetching all registered events: ', error);
+            Alert.alert('Error ', 'Failed to load all registered events data');
+        } finally {
+            setLoading(false);
+        }
+    }; 
+
+    useEffect(() => {
+        fetchAllUsers();
+        fetchAllPosts();
+        fetchAllRegisteredEvents();
+    }, [isAuthenticated]);
+
+    useEffect(() => {
+        const getProfile = () => {
+            const thisProfile = users.find((user) => user.email === email) || null;
+            setProfile(thisProfile);
+        };
+        getProfile();
+    }, [users])
+
+    useEffect(() => {
+        setUserName(`${profile?.first_name} ${profile?.last_name}` || "Guest");
+        if (profile?.admin_role) setAdmin(true);
+    }, [profile])
+
+    useEffect(() => {
+        let thisRegister: PostItem[] = [];
+        registeredEvents.forEach((event: RegisteredEvent) => {
+            const thisPost = posts.find((cred: PostItem) => cred.id === event.post_id);
+            if (thisPost) thisRegister.push(thisPost);
+        });
+        setRegister(thisRegister);
+    }, [posts, registeredEvents]);
 
     return (
         <View style={styles.container}>
