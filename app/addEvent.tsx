@@ -116,12 +116,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     header: {
+        paddingTop: 70,
         padding: 20,
         backgroundColor: '#263F75',
         width: '100%',
+        alignItems: 'center',
     },
     headerText: {
-        // paddingTop: 20,
         color: '#fff',
         fontSize: 35,
         fontWeight: 'bold',
