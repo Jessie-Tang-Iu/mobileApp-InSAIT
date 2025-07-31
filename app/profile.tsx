@@ -33,7 +33,10 @@ export default function Profile() {
                 </View>
                 <View style={styles.profileFunctions}>
                     <TouchableOpacity><Text style={styles.profileText}>General</Text></TouchableOpacity>
-                    <TouchableOpacity><Text style={styles.profileText}>Edit Profile</Text></TouchableOpacity>
+                    <TouchableOpacity>
+                        <Text 
+                        style={styles.profileText}
+                        onPress={() => router.push('../editProfile')}>Edit Profile</Text></TouchableOpacity>
                     <TouchableOpacity>
                         <Text 
                             style={styles.profileText}

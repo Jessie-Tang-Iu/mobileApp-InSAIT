@@ -42,12 +42,15 @@ export async function addUser(item: UserProfile) {
     return data;
 }
 
-export async function updateUser(id: number, user: UserProfile) {
+export async function updateUser(id: number, user: Partial<UserProfile>) {
+    console.log("Updating user:", user);
     const { data, error } = await supabase
         .from('user_profiles')
         .update(user)
-        .eq("id", id);
-    
+        .eq("id", id)
+        .select();
+        
+    console.log("Supabase response:", data);
     if (error) {
         console.error(`Error updating user with ID ${id}: `, error);
         throw error;

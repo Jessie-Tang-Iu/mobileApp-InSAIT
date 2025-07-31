@@ -10,6 +10,15 @@ import { getSession } from '../lib/supabase_auth';
 import { getAllPosts } from '../lib/supabase_crud';
 import { useUserContext } from '../context/userContext';
 import { PostItem } from '../lib/object_types';
+import SupabaseAuth from "../components/supabase_signin";
+
+interface UserProfile {
+    id: number;
+    first_name: string;
+    last_name: string;
+    email: string;
+    admin_role: boolean;
+}
 
 export default function App() {
 
