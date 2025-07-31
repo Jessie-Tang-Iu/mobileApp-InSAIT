@@ -9,10 +9,7 @@ import { useRouter } from 'expo-router';
 import { getSession } from '../lib/supabase_auth';
 import { getAllPosts } from '../lib/supabase_crud';
 import { useUserContext } from '../context/userContext';
-<<<<<<< Updated upstream
 import { PostItem } from '../lib/object_types';
-=======
->>>>>>> Stashed changes
 import SupabaseAuth from "../components/supabase_signin";
 
 interface UserProfile {
