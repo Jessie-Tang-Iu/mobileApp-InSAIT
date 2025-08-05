@@ -25,6 +25,7 @@ export default function EditProfile() {
     const [lastName, setLastName] = useState<string>("");
     const [password, setPassword] = useState("");
     const [oldEmail, setOldEmail] = useState(email);
+    const [profileURL, setProfileURL] = useState("");
 
     const icon = require('../assets/icon.png');
     
@@ -79,6 +80,7 @@ export default function EditProfile() {
                 setFirstName(thisProfile.first_name);
                 setLastName(thisProfile.last_name);
                 setProfile(thisProfile);
+                setProfileURL(thisProfile.picture_url);
             }
         };
         getProfile();
@@ -105,7 +107,8 @@ export default function EditProfile() {
                 first_name: firstName,
                 last_name: lastName,
                 email: email,
-                admin_role: profile?.admin_role || false
+                admin_role: profile?.admin_role || false,
+                picture_url: profileURL
             };
 
             if (email=== oldEmail && password === "" )
@@ -115,6 +118,7 @@ export default function EditProfile() {
                 const UpdatedUser = {
                     first_name: firstName,
                     last_name: lastName,
+                    picture_url: profileURL,
                 };
 
                 await updateUser(Number(id), UpdatedUser);
@@ -176,13 +180,13 @@ export default function EditProfile() {
             <View style={styles.container}>
 
                 <ScrollView>
-                    {/* <View style={styles.imageContainer}>
-                        <Image source={icon} style={styles.image} />
-                        <TouchableOpacity>
+                    <View style={styles.imageContainer}>
+                        <Image source={profileURL ? { uri: profileURL } : icon} style={styles.image} />
+                        {/* <TouchableOpacity>
                             <Text style={styles.imageButtonText}>Edit picture</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
-                    <View style={styles.hr} /> */}
+                    <View style={styles.hr} />
                     <Text style={styles.inputText}>First Name</Text>
                     <TextInput
                         style={styles.input}
@@ -212,6 +216,13 @@ export default function EditProfile() {
                         onChangeText={setPassword}
                     />
                     <Text style={styles.reminderText}>{reminderText}</Text>
+                    <Text style={styles.inputText}>Profile Pic URL</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="https://example.com"
+                        value={profileURL}
+                        onChangeText={setProfileURL}
+                    />
 
                     <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
                         <Text style={styles.buttonText}>Save</Text>
@@ -233,7 +244,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 658,
         paddingHorizontal: 30,
-        paddingTop: 40,
+        paddingVertical: 40,
     },
     imageContainer: {
         justifyContent: 'center',
@@ -312,7 +323,7 @@ const styles = StyleSheet.create({
     submitButton: {
         backgroundColor: '#263F75',
         marginHorizontal: 20,
-        marginTop: 80,
+        marginTop: 40,
         padding: 5,
         alignItems: 'center',
         justifyContent: 'center',
