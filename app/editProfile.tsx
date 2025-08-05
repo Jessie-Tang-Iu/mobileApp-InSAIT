@@ -186,7 +186,7 @@ export default function EditProfile() {
                             <Text style={styles.imageButtonText}>Edit picture</Text>
                         </TouchableOpacity> */}
                     </View>
-                    <View style={styles.hr} />
+                    {/* <View style={styles.hr} /> */}
                     <Text style={styles.inputText}>First Name</Text>
                     <TextInput
                         style={styles.input}
@@ -244,17 +244,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 658,
         paddingHorizontal: 30,
-        paddingVertical: 40,
+        paddingVertical: 20,
     },
     imageContainer: {
         justifyContent: 'center',
         alignItems: 'center',
+        height: 150,
     },
     image: {
         borderRadius: 50,
-        width: 101,
-        height: 101,
-        margin: 20,
+        width: 130,
+        height: 130,
+        // margin: 20,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -323,7 +324,8 @@ const styles = StyleSheet.create({
     submitButton: {
         backgroundColor: '#263F75',
         marginHorizontal: 20,
-        marginTop: 40,
+        marginTop: 20,
+        marginBottom: 150,
         padding: 5,
         alignItems: 'center',
         justifyContent: 'center',
