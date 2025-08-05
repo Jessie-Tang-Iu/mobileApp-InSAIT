@@ -48,10 +48,9 @@ export default function Layout() {
                             name="editProfile"
                             options={{
                                 title: "Edit Profile",
-                                // headerStyle: {backgroundColor: "fff"},
                                 headerTitleStyle: {fontSize: 25, fontWeight: 'bold', color: '#263F75'},
                                 headerTitleAlign: 'center',
-                                headerBackTitleVisible: false,
+                                // headerBackTitleVisible: false,
                                 headerShown: true,
                             }}
                         />

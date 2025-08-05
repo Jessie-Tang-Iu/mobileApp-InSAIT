@@ -21,7 +21,7 @@ const SupabaseAuth = () => {
     const [posts, setPosts] = useState<PostItem[]>([]);
     const [registeredEvents, setRegisteredEvents] = useState<RegisteredEvent[]>([]);
 
-    const { email, setUserName, setEmail, setAdmin, setRegister } = useUserContext();
+    const { email, setPictureUrl, setUserName, setEmail, setAdmin, setRegister } = useUserContext();
 
     const router = useRouter();
     const newProfile = {
@@ -134,6 +134,7 @@ const SupabaseAuth = () => {
     }, [users])
 
     useEffect(() => {
+        setPictureUrl(`${profile?.picture_url}`);
         setUserName(`${profile?.first_name} ${profile?.last_name}` || "Guest");
         if (profile?.admin_role) setAdmin(true);
     }, [profile])

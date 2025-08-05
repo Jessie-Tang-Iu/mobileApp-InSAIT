@@ -4,10 +4,12 @@ import { PostItem } from '../lib/object_types';
 interface UserContextType {
     username: string;
     email: string;
+    pictureUrl: string;
     admin: boolean;
     register: PostItem[];
     setUserName: (username: string) => void;
     setEmail: (email: string) => void;
+    setPictureUrl: (pictureUrl: string) => void;
     setAdmin: (admin: boolean) => void;
     setRegister: (register: PostItem[]) => void;
 }
@@ -30,11 +32,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
     const [username, setUserName] = useState<string>("Guest");
     const [email, setEmail] = useState<string>("");
+    const [pictureUrl, setPictureUrl] = useState<string>("");
     const [admin, setAdmin] = useState<boolean>(false);
     const [register, setRegister] = useState<PostItem[]>([]);
 
     return (
-        <UserContext.Provider value={{ username, email, admin, register, setUserName, setEmail, setAdmin, setRegister }}> 
+        <UserContext.Provider value={{ username, email, pictureUrl, admin, register, setUserName, setEmail, setPictureUrl, setAdmin, setRegister }}> 
             {children}
         </UserContext.Provider>
     );
