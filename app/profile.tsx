@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView, ScrollView } from "react-native-gesture-handler";
 import { useRouter } from "expo-router";
 import Navbar from "../components/navbar";
@@ -8,7 +8,9 @@ import { useUserContext } from "../context/userContext";
 
 export default function Profile() {
 
-    const { username, email, register, setEmail, setUserName, setRegister } = useUserContext();
+    const icon = require('../assets/icon.png');
+
+    const { username, email, pictureUrl, register, setEmail, setUserName, setRegister } = useUserContext();
   
     const router = useRouter();
     
@@ -22,8 +24,13 @@ export default function Profile() {
         <GestureHandlerRootView style={{ flex: 1, paddingTop: 50, backgroundColor: '#263F75' }}>
             <View style={styles.container}>
                 <View style={styles.header}>
-                    <Text style={styles.headerText}>{username}</Text>
-                    <Text style={styles.text}>{email}</Text>
+                    <View style={styles.userInfo}>
+                        <Text style={styles.headerText}>{username}</Text>
+                        <Text style={styles.text}>{email}</Text>
+                    </View>
+                    <View>
+                        <Image source={pictureUrl ? {uri: pictureUrl} : icon} style={styles.pictureContainer} />
+                    </View>
                 </View>
                 <View style={styles.content}>
                     <Text style={styles.headerContent}>My Registered Event</Text>
@@ -58,9 +65,20 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
         padding: 20,
         backgroundColor: '#263F75',
         width: '100%',
+    },
+    userInfo: {
+        flex: 1
+    },
+    pictureContainer: {
+        width: 80,
+        height: 80,
+        borderRadius: 25,
     },
     headerText: {
         // paddingTop: 20,

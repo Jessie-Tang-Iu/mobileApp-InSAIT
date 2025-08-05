@@ -16,6 +16,7 @@ export interface UserProfile {
     last_name: string;
     email: string;
     admin_role: boolean;
+    picture_url: string;
 }
 
 export interface RegisteredEvent {
