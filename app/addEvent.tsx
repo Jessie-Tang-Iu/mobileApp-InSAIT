@@ -15,6 +15,7 @@ export default function AddEvent() {
     const [location, setLocation] = useState("");
     const [cost, setCost] = useState("");
     const [details, setDetails] = useState("");
+    const [url, setUrl] = useState("");
 
     const [loading, setLoading] = useState(false);
 
@@ -45,7 +46,7 @@ export default function AddEvent() {
             location: location,
             cost: cost,
             details: details,
-            post_url: "",
+            post_url: url,
         };
         try {
             await addPost(newEvent);
@@ -119,6 +120,14 @@ export default function AddEvent() {
                         placeholder="Details"
                         value={details}
                         onChangeText={setDetails}
+                        style={[styles.input, styles.textArea]}
+                        multiline
+                    />
+                    <Text style={styles.inputLabel}>Banner URL</Text>
+                    <TextInput
+                        placeholder="http://example.com"
+                        value={url}
+                        onChangeText={setUrl}
                         style={[styles.input, styles.textArea]}
                         multiline
                     />

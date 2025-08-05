@@ -10,6 +10,7 @@ const SupabaseAuth = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [password, setPassword] = useState("");
+    const [profileURL, setProfileURL] = useState("");
     const [isSignIn, setIsSignIn] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -28,7 +29,7 @@ const SupabaseAuth = () => {
         last_name: '',
         email: '',
         admin_role: false, // or a default value as required
-        pictureUrl: '',
+        profileURL: '',
     };
 
     const registerUser = async () => {
@@ -43,7 +44,7 @@ const SupabaseAuth = () => {
             last_name: lastName,
             email: email,
             admin_role: false, // or set as needed
-            picture_url: '',
+            picture_url: profileURL,
         };
         try {
             await signUp(email, password);
