@@ -10,6 +10,7 @@ import { getSession } from '../lib/supabase_auth';
 import { getAllPosts } from '../lib/supabase_crud';
 import { useUserContext } from '../context/userContext';
 import { PostItem } from '../lib/object_types';
+import SupabaseAuth from "../components/supabase_signin";
 
 export default function App() {
 
@@ -52,6 +53,10 @@ export default function App() {
         getCurrentSession();
     }, []);
 
+    const filteredPosts = posts.filter(post =>
+        post.event_name.toLowerCase().includes(searchText.toLowerCase())
+    );
+
     return (
         <GestureHandlerRootView style={{ flex: 1, paddingTop: 50, backgroundColor: '#263F75' }}>
             <View style={[styles.container]}>
@@ -69,7 +74,7 @@ export default function App() {
                 </View>
                 <View style={[styles.content]}>
                     <ScrollView>
-                        <Post posts={posts} />
+                        <Post posts={filteredPosts} />
                     </ScrollView>
                 </View>
                 <View style={styles.footer}>

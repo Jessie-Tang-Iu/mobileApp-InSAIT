@@ -195,6 +195,9 @@ const styles = StyleSheet.create({
         padding: 5,
         marginBottom: 100,
         alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 8,
+        height: 50,
     },
     text: {
         color: '#fff',
