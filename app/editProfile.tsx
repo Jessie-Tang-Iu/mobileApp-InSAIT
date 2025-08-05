@@ -8,14 +8,9 @@ import { getSession } from '../lib/supabase_auth';
 import { useRouter } from "expo-router";
 import { supabase } from "../lib/supabase";
 import { Feather } from '@expo/vector-icons';
+import { UserProfile } from "../lib/object_types";
 
-interface UserProfile {
-    id: number;
-    first_name: string;
-    last_name: string;
-    email: string;
-    admin_role: boolean;
-}
+
 
 export default function EditProfile() {
 
@@ -177,17 +172,8 @@ export default function EditProfile() {
     }
 
     return(
-        <View>
+        <View style={{ flex: 1 }}>
             <View style={styles.container}>
-
-                <View style={styles.buttonContainer}>
-                     <TouchableOpacity onPress={() => router.push('./profile')}>
-                        <Text style={styles.buttonText}><Feather name='chevron-left'></Feather>Back to Profile</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleSubmit}>
-                        <Text style={styles.buttonText}>Done</Text>
-                    </TouchableOpacity>
-                </View>
 
                 <ScrollView>
                     {/* <View style={styles.imageContainer}>
@@ -226,6 +212,10 @@ export default function EditProfile() {
                         onChangeText={setPassword}
                     />
                     <Text style={styles.reminderText}>{reminderText}</Text>
+
+                    <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+                        <Text style={styles.buttonText}>Save</Text>
+                    </TouchableOpacity>
                 </ScrollView>
             </View>
             <View style={styles.footer}>
@@ -237,6 +227,7 @@ export default function EditProfile() {
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: '#fff',
         justifyContent: 'center',
         alignItems: 'center',
@@ -305,11 +296,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         marginBottom: 30,
-
+        alignItems: "flex-end",
     },
     buttonText: {
-        color: '#000',
-        fontSize: 16,
+        color: 'white',
+        fontSize: 20,
         fontWeight: 'bold',
     },
     footer: {
@@ -317,5 +308,15 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 15,
         paddingBottom: 10,
-    }
+    },
+    submitButton: {
+        backgroundColor: '#263F75',
+        marginHorizontal: 20,
+        marginTop: 80,
+        padding: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 8,
+        height: 50,
+    },
 });

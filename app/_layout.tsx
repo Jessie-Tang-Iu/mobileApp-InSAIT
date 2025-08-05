@@ -44,6 +44,17 @@ export default function Layout() {
                                 headerShown: false,
                             }}
                         />
+                        <Stack.Screen 
+                            name="editProfile"
+                            options={{
+                                title: "Edit Profile",
+                                // headerStyle: {backgroundColor: "fff"},
+                                headerTitleStyle: {fontSize: 25, fontWeight: 'bold', color: '#263F75'},
+                                headerTitleAlign: 'center',
+                                headerBackTitleVisible: false,
+                                headerShown: true,
+                            }}
+                        />
                         <Stack.Screen
                             name="sign_in"
                             options={{
