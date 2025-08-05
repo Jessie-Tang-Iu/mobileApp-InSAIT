@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Navbar from "../components/navbar";
 import { useUserContext } from "../context/userContext";
-import { getAllUsers, getUserById, deleteUser, addUser, updateUser } from '../lib/supabase_crud';
+import { getAllUsers, getUserById, deleteUser, addUser, updateUser, getRegisteredEventByEmail } from '../lib/supabase_crud';
+import { signUp } from "../lib/supabase_auth";
 import { getSession } from '../lib/supabase_auth';
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
+import { supabase } from "../lib/supabase";
+import { Feather } from '@expo/vector-icons';
 
 interface UserProfile {
     id: number;
@@ -26,8 +29,19 @@ export default function EditProfile() {
     const [firstName, setFirstName] = useState<string>(username);
     const [lastName, setLastName] = useState<string>("");
     const [password, setPassword] = useState("");
+    const [oldEmail, setOldEmail] = useState(email);
+
+    const icon = require('../assets/icon.png');
+    
+    const [reminderText, setReminderText] = useState("");
 
     const router = useRouter();
+
+    const handleLogout = () => {
+        setEmail("");
+        setUserName("Guest");
+        router.push('../sign_in');
+    };
 
     const getCurrentSession = async () => {
         try {
@@ -80,21 +94,82 @@ export default function EditProfile() {
         setLastName(profile?.last_name || "Guest");
     }, [profile])
 
+    useEffect(() => {
+        if (email !== oldEmail) {
+            setReminderText("If you need to change your email, password is REQUIRED!");
+        } else {
+            setReminderText("If you want to keep the old password, please leave this field as EMPTY or NULL.");
+        }
+    })
+
     const handleSubmit = async () => {
         try{
             const existingUser = await getUserById(Number(id));
 
-            const UpdatedUser = {
+            const NewProfile = {
                 first_name: firstName,
                 last_name: lastName,
                 email: email,
                 admin_role: profile?.admin_role || false
             };
 
-            console.log("Updating user with ID:", id);
-            console.log("Sending update:", UpdatedUser);
-            await updateUser(Number(id), UpdatedUser);
-            Alert.alert('Success', `User ${UpdatedUser.first_name} updated!`);
+            if (email=== oldEmail && password === "" )
+            {
+                console.log("Update User Name only. Id: ", existingUser.id);
+
+                const UpdatedUser = {
+                    first_name: firstName,
+                    last_name: lastName,
+                };
+
+                await updateUser(Number(id), UpdatedUser);
+                Alert.alert(
+                    'Success', 
+                    `User ${UpdatedUser.first_name}'s profile is updated!\nPlease Log In Again!`,
+                    [
+                        {
+                            text: 'OK',
+                            onPress: handleLogout,
+                        }
+                    ]
+                );
+
+            } else {
+
+                if (password === "") {
+                    Alert.alert('Error', 'Password cannot be NULL');
+                    console.log("Password cannot be empty.")
+                    return;
+                }
+
+                console.log("Existing User UUID: ", existingUser.profile_id);
+
+                await supabase.auth.admin.deleteUser(existingUser.profile_id);
+                await deleteUser(Number(id));
+                console.log("Deleting user with ID:", id);
+                await signUp(email, password);
+                await addUser(NewProfile);
+                console.log("Adding user:", NewProfile);
+
+                const registeredEvent = getRegisteredEventByEmail(oldEmail);
+                console.log("Registered Event: ", registeredEvent);
+
+                await supabase
+                .from('registered_events')
+                .update({ profile_email: email })
+                .eq('profile_email', oldEmail);
+
+                Alert.alert(
+                    'Success', 
+                    `User ${NewProfile.first_name}'s profile is updated!\nPlease Log In Again!`,
+                    [
+                        {
+                            text: 'OK',
+                            onPress: handleLogout,
+                        }
+                    ]
+                );
+            }
         } catch (error) {
             Alert.alert('Error', 'Could not update user.');
             console.error(error);
@@ -104,37 +179,54 @@ export default function EditProfile() {
     return(
         <View>
             <View style={styles.container}>
-                <Text style={styles.inputText}>First Name</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="First Name"
-                    value={firstName}
-                    onChangeText={setFirstName}
-                />
-                <Text style={styles.inputText}>Last Name</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Last Name"
-                    value={lastName}
-                    onChangeText={setLastName}
-                />
-                <Text style={styles.inputText}>New Password</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="password"
-                    value={password}
-                    onChangeText={setPassword}
-                />
-                <Text style={styles.inputText}>Email</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="email"
-                    value={email}
-                    onChangeText={setEmail}
-                />
-                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-                    <Text style={styles.buttonText}>Update</Text>
-                </TouchableOpacity>
+
+                <View style={styles.buttonContainer}>
+                     <TouchableOpacity onPress={() => router.push('./profile')}>
+                        <Text style={styles.buttonText}><Feather name='chevron-left'></Feather>Back to Profile</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleSubmit}>
+                        <Text style={styles.buttonText}>Done</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <ScrollView>
+                    {/* <View style={styles.imageContainer}>
+                        <Image source={icon} style={styles.image} />
+                        <TouchableOpacity>
+                            <Text style={styles.imageButtonText}>Edit picture</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.hr} /> */}
+                    <Text style={styles.inputText}>First Name</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="First Name"
+                        value={firstName}
+                        onChangeText={setFirstName}
+                    />
+                    <Text style={styles.inputText}>Last Name</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Last Name"
+                        value={lastName}
+                        onChangeText={setLastName}
+                    />
+                    <Text style={styles.inputText}>Email</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="email"
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+                    <Text style={styles.inputText}>Password</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="password"
+                        value={password}
+                        onChangeText={setPassword}
+                    />
+                    <Text style={styles.reminderText}>{reminderText}</Text>
+                </ScrollView>
             </View>
             <View style={styles.footer}>
                 <Navbar />
@@ -149,6 +241,31 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         height: 658,
+        paddingHorizontal: 30,
+        paddingTop: 40,
+    },
+    imageContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        borderRadius: 50,
+        width: 101,
+        height: 101,
+        margin: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    imageButtonText: {
+        color: '#2782D8',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    hr: {
+        borderBottomColor: '#333',
+        borderBottomWidth: 1,
+        marginVertical: 20,
+        width: '100%',
     },
     inputText: {
         fontSize: 20,
@@ -167,6 +284,11 @@ const styles = StyleSheet.create({
         minWidth: 300,
         maxWidth: 400,
     },
+    reminderText: {
+        fontSize: 15,
+        marginBottom: 20,
+        color: 'red',
+    },
     button: {
         backgroundColor: '#0284c7',
         height: 50,
@@ -175,10 +297,18 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         width: '100%',
         alignItems: 'center',
+        minWidth: 100,
         maxWidth: 300,
     },
+    buttonContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        width: '100%',
+        marginBottom: 30,
+
+    },
     buttonText: {
-        color: 'white',
+        color: '#000',
         fontSize: 16,
         fontWeight: 'bold',
     },
