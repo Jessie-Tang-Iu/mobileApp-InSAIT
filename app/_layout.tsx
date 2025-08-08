@@ -24,6 +24,10 @@ export default function Layout() {
                             name="event/[postId]"
                             options={{
                                 title: 'Event Detail',
+                                headerTitleStyle: {fontSize: 25, fontWeight: 'bold', color: '#263F75'},
+                                headerTitleAlign: 'center',
+                                // headerBackTitleVisible: false,
+                                headerShown: true,
                             }}
                         />
                         <Stack.Screen 

@@ -100,7 +100,7 @@ export default function EventDetails() {
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.main}>
-          <Image source={icon} style={styles.image} />
+          <Image source={post.post_url ? { uri: post.post_url } : icon} style={styles.image} />
           <Text style={styles.headerText}>{post.event_name}</Text>
           <Text>{formattedStart} - {formattedEnd}</Text>
           <Text>Hosted By {post.organization_name}</Text>
