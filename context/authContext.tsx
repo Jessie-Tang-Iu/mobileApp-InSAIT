@@ -76,7 +76,7 @@ export const UserContextProvider = ({ children } : UserContextProviderProps) => 
         try {
             const { data, error } = await supabase
                 .from("user_profiles")
-                .select("id, first_name, last_name, email, admin_role")
+                .select("id, first_name, last_name, email, admin_role, picture_url")
                 .eq("id", userId)
                 .single();
             
