@@ -10,13 +10,14 @@ export default function Profile() {
 
     const icon = require('../assets/icon.png');
 
-    const { username, email, pictureUrl, register, setEmail, setUserName, setRegister } = useUserContext();
+    const { username, email, pictureUrl, register, setEmail, setUserName, setRegister, setAdmin } = useUserContext();
   
     const router = useRouter();
     
     const handleLogout = () => {
         setEmail("");
         setUserName("Guest");
+        setAdmin(false);
         router.push('../sign_in');
     };
 

@@ -23,24 +23,15 @@ export default function AddEvent() {
 
     const [showStartPicker, setShowStartPicker] = useState(false);
     const [showEndPicker, setShowEndPicker] = useState(false);
-
-    const onStartChange = (event: any,selectedDate: Date) => {
-        setShowStartPicker(Platform.OS === 'ios');
-        if (selectedDate) {
-        setStartTime(selectedDate);
-        setShowStartPicker(false);
-        }
-    };
-
-    const onEndChange = (event: any,selectedDate: Date) => {
-        setShowEndPicker(Platform.OS === 'ios');
-        if (selectedDate) {
-        setEndTime(selectedDate);
-        setShowEndPicker(false);
-        }
-    };
+    const [endTimeError, setEndTimeError] = useState("");
 
     const handleAddEvent = async () => {
+
+        if (endTime <= startTime) {
+            Alert.alert("Invalid Time", "End time must be after the start time.");
+            return;
+        }
+
         setLoading(true);
         let newEvent = {
             event_name: eventName,
@@ -99,6 +90,21 @@ export default function AddEvent() {
     }
     };
 
+    const onEndChange = (event: any, selectedDate: Date | undefined) => {
+        setShowEndPicker(Platform.OS === 'ios');
+        if (selectedDate) {
+            setEndTime(selectedDate);
+
+            if (selectedDate <= startTime) {
+                setEndTimeError("End time must be after start time.");
+            } else {
+                setEndTimeError(""); // Clear error if valid
+            }
+
+            setShowEndPicker(false);
+        }
+    };
+
     const showEndTimePicker = () => {
     if (Platform.OS === 'android') {
         DateTimePickerAndroid.open({
@@ -124,6 +130,13 @@ export default function AddEvent() {
                     selectedTime.getMinutes()
                     );
                     setEndTime(finalDateTime);
+
+                    // Validate immediately
+                    if (finalDateTime <= startTime) {
+                        setEndTimeError("End time must be after start time.");
+                    } else {
+                        setEndTimeError("");
+                    }
                 }
                 },
             });
@@ -191,27 +204,9 @@ export default function AddEvent() {
                         }}
                     />
                     )}
-                    {/* <Button title={startTime.toLocaleString()} onPress={() => setShowStartPicker(true)} />
-                    {Platform.OS === 'android' && showStartPicker && (
-                        <DateTimePicker
-                        value={startTime}
-                        mode="datetime"
-                        is24Hour={true}
-                        display="spinner"
-                        onChange={onStartChange}
-                        />
+                    {endTimeError !== "" && (
+                        <Text style={styles.errorText}>{endTimeError}</Text>
                     )}
-                    <Text style={styles.inputLabel}>End Time</Text>
-                    <Button title={endTime.toLocaleString()} onPress={() => setShowEndPicker(true)} />
-                    {Platform.OS === 'android' && showEndPicker && (
-                        <DateTimePicker
-                        value={endTime}
-                        mode="datetime"
-                        is24Hour={true}
-                        display="spinner"
-                        onChange={onEndChange}
-                        />
-                    )} */}
                     <Text style={styles.inputLabel}>Location</Text>
                     <TextInput
                         placeholder="Location"
@@ -326,5 +321,11 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 5,
         fontWeight: 'bold',
+    },
+    errorText: {
+        color: 'red',
+        marginLeft: 28,
+        marginTop: 4,
+        fontSize: 14,
     },
 })
