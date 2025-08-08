@@ -63,71 +63,78 @@ export default function AddEvent() {
     };
 
     const showStartTimePicker = () => {
-  // First show date picker
-  DateTimePickerAndroid.open({
-    value: startTime,
-    mode: 'date',
-    is24Hour: true,
-    display: 'spinner',
-    onChange: (event, selectedDate) => {
-      if (selectedDate) {
-        const currentDate = selectedDate;
-        // Now open the time picker
+    if (Platform.OS === 'android') {
+        // Android: show date, then time
         DateTimePickerAndroid.open({
-          value: currentDate,
-          mode: 'time',
-          is24Hour: true,
-          display: 'spinner',
-          onChange: (event, selectedTime) => {
-            if (selectedTime) {
-              const finalDateTime = new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth(),
-                currentDate.getDate(),
-                selectedTime.getHours(),
-                selectedTime.getMinutes()
-              );
-              setStartTime(finalDateTime);
+        value: startTime,
+        mode: 'date',
+        is24Hour: true,
+        display: 'spinner',
+        onChange: (event, selectedDate) => {
+            if (selectedDate) {
+            const currentDate = selectedDate;
+            DateTimePickerAndroid.open({
+                value: currentDate,
+                mode: 'time',
+                is24Hour: true,
+                display: 'spinner',
+                onChange: (event, selectedTime) => {
+                if (selectedTime) {
+                    const finalDateTime = new Date(
+                    currentDate.getFullYear(),
+                    currentDate.getMonth(),
+                    currentDate.getDate(),
+                    selectedTime.getHours(),
+                    selectedTime.getMinutes()
+                    );
+                    setStartTime(finalDateTime);
+                }
+                },
+            });
             }
-          },
+        },
         });
-      }
-    },
-  });
-};
-
+    } else {
+        setShowStartPicker(true); // iOS
+    }
+    };
 
     const showEndTimePicker = () => {
-  DateTimePickerAndroid.open({
-    value: endTime,
-    mode: 'date',
-    is24Hour: true,
-    display: 'spinner',
-    onChange: (event, selectedDate) => {
-      if (selectedDate) {
-        const currentDate = selectedDate;
+    if (Platform.OS === 'android') {
         DateTimePickerAndroid.open({
-          value: currentDate,
-          mode: 'time',
-          is24Hour: true,
-          display: 'spinner',
-          onChange: (event, selectedTime) => {
-            if (selectedTime) {
-              const finalDateTime = new Date(
-                currentDate.getFullYear(),
-                currentDate.getMonth(),
-                currentDate.getDate(),
-                selectedTime.getHours(),
-                selectedTime.getMinutes()
-              );
-              setEndTime(finalDateTime);
+        value: endTime,
+        mode: 'date',
+        is24Hour: true,
+        display: 'spinner',
+        onChange: (event, selectedDate) => {
+            if (selectedDate) {
+            const currentDate = selectedDate;
+            DateTimePickerAndroid.open({
+                value: currentDate,
+                mode: 'time',
+                is24Hour: true,
+                display: 'spinner',
+                onChange: (event, selectedTime) => {
+                if (selectedTime) {
+                    const finalDateTime = new Date(
+                    currentDate.getFullYear(),
+                    currentDate.getMonth(),
+                    currentDate.getDate(),
+                    selectedTime.getHours(),
+                    selectedTime.getMinutes()
+                    );
+                    setEndTime(finalDateTime);
+                }
+                },
+            });
             }
-          },
+        },
         });
-      }
-    },
-  });
-};
+    } else {
+        setShowEndPicker(true); // iOS
+    }
+    };
+
 
 
     return(
@@ -158,8 +165,32 @@ export default function AddEvent() {
                     />
                     <Text style={styles.inputLabel}>Start Time</Text>
                     <Button title={startTime.toLocaleString()} onPress={showStartTimePicker} />
+                    {Platform.OS === 'ios' && showStartPicker && (
+                        <DateTimePicker
+                            value={startTime}
+                            mode="datetime"
+                            display="spinner"
+                            is24Hour={true}
+                            onChange={(event, selectedDate) => {
+                            setShowStartPicker(false);
+                            if (selectedDate) setStartTime(selectedDate);
+                            }}
+                        />
+                        )}
                     <Text style={styles.inputLabel}>End Time</Text>
                     <Button title={endTime.toLocaleString()} onPress={showEndTimePicker} />
+                    {Platform.OS === 'ios' && showEndPicker && (
+                    <DateTimePicker
+                        value={endTime}
+                        mode="datetime"
+                        display="spinner"
+                        is24Hour={true}
+                        onChange={(event, selectedDate) => {
+                        setShowEndPicker(false);
+                        if (selectedDate) setEndTime(selectedDate);
+                        }}
+                    />
+                    )}
                     {/* <Button title={startTime.toLocaleString()} onPress={() => setShowStartPicker(true)} />
                     {Platform.OS === 'android' && showStartPicker && (
                         <DateTimePicker
