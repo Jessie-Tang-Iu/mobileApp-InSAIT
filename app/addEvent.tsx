@@ -5,6 +5,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Platform } from 'react-native';
 import { useLocalSearchParams } from "expo-router";
 import { addPost } from "../lib/supabase_crud";
+import { Keyboard, TouchableWithoutFeedback,KeyboardAvoidingView } from 'react-native';
+import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
 export default function AddEvent() {
     
@@ -26,6 +28,7 @@ export default function AddEvent() {
         setShowStartPicker(Platform.OS === 'ios');
         if (selectedDate) {
         setStartTime(selectedDate);
+        setShowStartPicker(false);
         }
     };
 
@@ -33,6 +36,7 @@ export default function AddEvent() {
         setShowEndPicker(Platform.OS === 'ios');
         if (selectedDate) {
         setEndTime(selectedDate);
+        setShowEndPicker(false);
         }
     };
 
@@ -58,7 +62,80 @@ export default function AddEvent() {
         };
     };
 
+    const showStartTimePicker = () => {
+  // First show date picker
+  DateTimePickerAndroid.open({
+    value: startTime,
+    mode: 'date',
+    is24Hour: true,
+    display: 'spinner',
+    onChange: (event, selectedDate) => {
+      if (selectedDate) {
+        const currentDate = selectedDate;
+        // Now open the time picker
+        DateTimePickerAndroid.open({
+          value: currentDate,
+          mode: 'time',
+          is24Hour: true,
+          display: 'spinner',
+          onChange: (event, selectedTime) => {
+            if (selectedTime) {
+              const finalDateTime = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                currentDate.getDate(),
+                selectedTime.getHours(),
+                selectedTime.getMinutes()
+              );
+              setStartTime(finalDateTime);
+            }
+          },
+        });
+      }
+    },
+  });
+};
+
+
+    const showEndTimePicker = () => {
+  DateTimePickerAndroid.open({
+    value: endTime,
+    mode: 'date',
+    is24Hour: true,
+    display: 'spinner',
+    onChange: (event, selectedDate) => {
+      if (selectedDate) {
+        const currentDate = selectedDate;
+        DateTimePickerAndroid.open({
+          value: currentDate,
+          mode: 'time',
+          is24Hour: true,
+          display: 'spinner',
+          onChange: (event, selectedTime) => {
+            if (selectedTime) {
+              const finalDateTime = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                currentDate.getDate(),
+                selectedTime.getHours(),
+                selectedTime.getMinutes()
+              );
+              setEndTime(finalDateTime);
+            }
+          },
+        });
+      }
+    },
+  });
+};
+
+
     return(
+        <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : undefined}
+    style={{ flex: 1 }}
+  >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerText}>Create New Event</Text>
@@ -80,27 +157,30 @@ export default function AddEvent() {
                         style={styles.input}
                     />
                     <Text style={styles.inputLabel}>Start Time</Text>
-                    <Button title={startTime.toLocaleString()} onPress={() => setShowStartPicker(true)} />
-                    {showStartPicker && (
+                    <Button title={startTime.toLocaleString()} onPress={showStartTimePicker} />
+                    <Text style={styles.inputLabel}>End Time</Text>
+                    <Button title={endTime.toLocaleString()} onPress={showEndTimePicker} />
+                    {/* <Button title={startTime.toLocaleString()} onPress={() => setShowStartPicker(true)} />
+                    {Platform.OS === 'android' && showStartPicker && (
                         <DateTimePicker
                         value={startTime}
                         mode="datetime"
                         is24Hour={true}
-                        display="default"
+                        display="spinner"
                         onChange={onStartChange}
                         />
                     )}
                     <Text style={styles.inputLabel}>End Time</Text>
                     <Button title={endTime.toLocaleString()} onPress={() => setShowEndPicker(true)} />
-                    {showEndPicker && (
+                    {Platform.OS === 'android' && showEndPicker && (
                         <DateTimePicker
                         value={endTime}
                         mode="datetime"
                         is24Hour={true}
-                        display="default"
+                        display="spinner"
                         onChange={onEndChange}
                         />
-                    )}
+                    )} */}
                     <Text style={styles.inputLabel}>Location</Text>
                     <TextInput
                         placeholder="Location"
@@ -142,6 +222,8 @@ export default function AddEvent() {
                 <Navbar />
             </View>
         </View>
+        </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     );
 }
 
